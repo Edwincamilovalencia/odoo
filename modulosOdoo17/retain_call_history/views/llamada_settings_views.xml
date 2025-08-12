@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree para administradores -->
+    <record id="view_llamada_settings_tree" model="ir.ui.view">
+        <field name="name">llamada.settings.tree.admin</field>
+        <field name="model">llamada.settings</field>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+        <field name="arch" type="xml">
+            <tree string="Ajustes de vinculacion de agentes">
+                <field name="name"/>
+                <field name="agent_names_display"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Tree para usuarios de solo lectura -->
+    <record id="view_llamada_settings_tree_readonly" model="ir.ui.view">
+        <field name="name">llamada.settings.tree.readonly</field>
+        <field name="model">llamada.settings</field>
+        <field name="groups_id" eval="[(4, ref('retain_call_history.group_llamada_settings_readonly'))]"/>
+        <field name="arch" type="xml">
+            <tree string="Ajustes de vinculacion de agentes" create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="agent_names_display"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_llamada_settings_form" model="ir.ui.view">
+        <field name="name">llamada.settings.form</field>
+        <field name="model">llamada.settings</field>
+        <field name="arch" type="xml">
+            <form string="Ajustes">
+                <header>
+                    <button name="action_save_agents" type="object" string="Guardar agentes" class="btn-primary" groups="base.group_system"/>
+                </header>
+                <sheet>
+                    <group>
+                        <!-- Campos para administradores (editables) -->
+                        <field name="name" groups="base.group_system"/>
+                        <field name="agent_name" widget="many2many_tags" groups="base.group_system"/>
+
+                        <!-- Campos para usuarios de solo lectura -->
+                        <field name="name" readonly="1" groups="retain_call_history.group_llamada_settings_readonly"/>
+                        <field name="agent_name" readonly="1" widget="many2many_tags" groups="retain_call_history.group_llamada_settings_readonly"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_llamada_settings" model="ir.actions.act_window">
+        <field name="name">Ajustes de llamadas</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">llamada.settings</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_llamada_settings" name="Ajustes Llamadas" parent="menu_retain_call_submenu" action="action_llamada_settings" sequence="3"/>
+</odoo>
