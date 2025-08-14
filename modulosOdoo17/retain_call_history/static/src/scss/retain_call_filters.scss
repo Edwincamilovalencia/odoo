@@ -1,0 +1,163 @@
+/* Barra de filtros para retain.call.history
+   - Mantiene estilo de Odoo
+   - Accesible (focus) y responsive básico
+*/
+
+/* Contenedor principal de la barra */
+.o_retain_bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* barra centrada en el control panel */
+    gap: 12px 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--o-gray-200);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff, #fafbfe);
+    box-shadow: 0 1.5px 3px rgba(0,0,0,.06);
+    margin-bottom: 10px;
+    clear: both;
+}
+
+/* Línea superior de marca */
+.o_retain_bar::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: linear-gradient(90deg, var(--o-brand-600, #7C7BAD), rgba(124,123,173,.2));
+}
+
+/* Logo Odoo a la izquierda (mantener tamaño actual) */
+.o_retain_bar .logo-col .logo {
+    height: 28px;
+    width: auto;
+    display: block;
+    opacity: .95;
+}
+
+/* Inputs (fecha, etc.) dentro de la barra */
+.o_retain_bar .o_input {
+    height: 32px;
+    padding: 4px 12px;
+    border: 1px solid var(--o-gray-200);
+    border-radius: 8px;
+    background-color: var(--o-gray-50, #f8f9fb);
+    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.o_retain_bar .o_input:focus {
+    outline: none;
+    border-color: var(--o-brand-600, var(--o-brand-primary, #7C7BAD));
+    box-shadow: 0 0 0 2px rgba(124,123,173,.15);
+    background-color: #fff;
+}
+.o_retain_bar .o_input::placeholder { color: var(--o-gray-500); }
+
+/* Bloque de fechas */
+.o_retain_bar .dates { display:flex; align-items:center; gap:8px; }
+.o_retain_bar #retain_date_range { width: 240px; }
+.o_retain_bar #retain_dates_fallback.inline { display:flex; align-items:center; gap:8px; }
+.o_retain_bar .range-sep { margin: 0 4px; color: var(--o-gray-600); }
+
+/* Botón "Limpiar filtros" */
+.o_retain_bar .actions { display:flex; align-items:center; justify-content:flex-start; }
+.o_retain_bar .actions .btn {
+    height: 32px; line-height: 18px; padding: 4px 12px 4px 36px;
+    border-radius: 8px;
+    border: 1px solid var(--o-gray-300);
+    background: linear-gradient(#f3f4f7, #eceef3);
+    color: var(--o-gray-800);
+    position: relative;
+}
+.o_retain_bar .actions .btn::before {
+    /* Icono "x" decorativo del botón */
+    content: "";
+    position: absolute;
+    left: 10px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; opacity: .85;
+    background-repeat: no-repeat; background-size: 16px 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23707070' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='15' y1='9' x2='9' y2='15'/%3E%3Cline x1='9' y1='9' x2='15' y2='15'/%3E%3C/svg%3E");
+}
+.o_retain_bar .actions .btn:hover {
+    filter: brightness(0.98);
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+}
+.o_retain_bar .actions .btn:active { transform: translateY(0.5px); }
+
+/* Iconos dentro de inputs de fecha */
+#retain_date_range,
+#retain_date_from,
+#retain_date_to {
+    padding-left: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237C7BAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 10px center; background-size: 16px 16px;
+}
+
+/* Dropdown de agentes: botón y menú */
+.o_retain_bar .agents { display:flex; align-items:center; }
+
+.retain-dd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .12s ease, box-shadow .12s ease;
+    border: 1px solid var(--o-gray-300);
+    background: linear-gradient(#fff,#fbfbfd);
+}
+.retain-dd-btn:hover { background: rgba(0,0,0,0.03); }
+.retain-dd-btn:focus {
+    outline: 2px solid rgba(59, 130, 246, 0.25);
+    outline-offset: 2px;
+}
+.retain-agent-icon {
+    width: 18px; height: 18px;
+    display: inline-block; vertical-align: middle; flex: 0 0 auto;
+}
+.retain-menu {
+    /* Estética del menú (el display lo controla JS) */
+    transition: opacity .12s ease, transform .12s ease;
+    transform-origin: top left;
+    box-shadow: 0 8px 24px rgba(22,27,34,0.08);
+    border-radius: 6px;
+    z-index: 2000;
+}
+.retain-menu .retain-search {
+    /* Buscador dentro del menú */
+    width: calc(100% - 24px);
+    margin: 8px 12px;
+    padding: 6px 8px;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* Integración con la barra de búsqueda de Odoo */
+.o_control_panel .o_cp_bottom_left .o_searchview { margin-bottom: 24px; }
+#retain_header_dom { clear: both; }
+
+/* Oculta chips por defecto en esta vista (evita duplicar filtros) */
+.retain-hide-chips .o_searchview_facet { display: none !important; }
+
+/* Asegura ancho completo del contenedor custom */
+.o_control_panel.retain-hide-chips .o_cp_bottom_left { display: flex; flex-wrap: wrap; }
+.o_control_panel.retain-hide-chips #retain_header_dom { flex: 0 0 100%; width: 100%; }
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .o_retain_bar { gap: 10px 12px; }
+    .o_retain_bar #retain_date_range { width: 210px; }
+}
+@media (max-width: 992px) {
+    .o_retain_bar { justify-content: center; flex-wrap: wrap; }
+    .o_retain_bar .actions { width: 100%; justify-content: flex-end; }
+}
+@media (max-width: 780px) {
+    .o_retain_bar { gap: 8px; }
+    .o_retain_bar .dates { flex-basis: 100%; display:flex; gap:8px; }
+    .o_retain_bar .actions { order: 3; }
+}

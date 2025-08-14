@@ -1,5 +1,30 @@
 <odoo>
-    <data>
+  <data>
+    <!-- Mount point rendered in the Control Panel buttons area -->
+    <template id="RetainCallHeaderMount">
+      <div id="retain_header_mount"></div>
+    </template>
+
+    <!-- Actual component template -->
+    <template id="RetainCallHeader">
+      <div class="o_retain_header">
+        <img class="logo" src="/web/static/img/logo.png"/>
+        <div class="agents">
+          <label>Agentes</label>
+                    <select id="retain_agent_selector" multiple="multiple"></select>
+        </div>
+        <div class="dates">
+          <label>Desde</label>
+          <input id="retain_date_from" type="date"/>
+          <label>Hasta</label>
+          <input id="retain_date_to" type="date"/>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" t-on-click="applyRetainFilters">Aplicar</button>
+          <button class="btn btn-secondary" t-on-click="clearRetainFilters">Limpiar</button>
+        </div>
+      </div>
+    </template>
 <!--
         <template id="listing">
           <ul>
@@ -20,5 +45,5 @@
           </dl>
         </template>
 -->
-    </data>
+  </data>
 </odoo>

@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Hidden search view with dynamic domain from context -->
+    <record id="view_retain_call_history_search" model="ir.ui.view">
+        <field name="name">retain.call.history.search</field>
+        <field name="model">retain.call.history</field>
+        <field name="arch" type="xml">
+            <search string="Buscar llamadas">
+                <!-- Invisible filters that become active when JS sets search_default_* in context -->
+                <filter name="retain_agents_filter" string="Agente" invisible="1" domain="[( 'agent_name', 'in', context.get('retain_agents', []) )]"/>
+                <filter name="retain_date_from_filter" string="Desde" invisible="1" domain="[( 'call_date', '&gt;=', context.get('retain_date_from') )]"/>
+                <filter name="retain_date_to_filter" string="Hasta" invisible="1" domain="[( 'call_date', '&lt;=', context.get('retain_date_to') )]"/>
+                <!-- Optional quick fields -->
+                <field name="agent_name"/>
+                <field name="call_date"/>
+            </search>
+        </field>
+    </record>
     <!-- Vista Tree para administradores -->
     <record id="view_retain_call_history_tree" model="ir.ui.view">
         <field name="name">retain.call.history.tree.admin</field>
@@ -18,7 +34,7 @@
                        decoration-warning="call_status in ('pending', 'unknown', 'registered')"
                        decoration-info="call_status in ('in_progress', 'ongoing')"
                        decoration-muted="call_status == 'ended'"/>
-                <field name="duration_ms" string="Duración (ms)"/>
+                <field name="duration" string="Duración(min)"/>
                 <field name="disconnection_reason" string="Motivo de desconexión"/>
             </tree>
         </field>
@@ -42,7 +58,7 @@
                        decoration-warning="call_status in ('pending', 'unknown', 'registered')"
                        decoration-info="call_status in ('in_progress', 'ongoing')"
                        decoration-muted="call_status == 'ended'"/>
-                <field name="duration_ms" string="Duración (ms)"/>
+                <field name="duration" string="Duración(min)"/>
                 <field name="disconnection_reason" string="Motivo de desconexión"/>
             </tree>
         </field>
@@ -112,9 +128,9 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Notas">
-                            <field name="notes" readonly="not editable" placeholder="Añade aquí las notas de la llamada..." groups="base.group_system"/>
-                            <field name="notes" readonly="1" placeholder="Añade aquí las notas de la llamada..." groups="retain_call_history.group_llamada_readonly"/>
+                        <page string="Descripción de la llamada">
+                            <field name="description_llamada" readonly="not editable" placeholder="Añade aquí la descripción de la llamada..." groups="base.group_system"/>
+                            <field name="description_llamada" readonly="1" placeholder="Añade aquí la descripción de la llamada..." groups="retain_call_history.group_llamada_readonly"/>
                         </page>
                         <page string="Transcripción">
                             <field name="transcription" readonly="not editable" placeholder="Transcripción automática de la llamada..." groups="base.group_system"/>
@@ -132,12 +148,11 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">retain.call.history</field>
         <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="retain_call_history.view_retain_call_history_search"/>
     </record>
 
     <!-- Menús -->
     <menuitem id="menu_retain_call_root" name="Gestión de Llamadas" sequence="10"/>
     <menuitem id="menu_retain_call_submenu" name="Llamadas" parent="menu_retain_call_root" sequence="1"/>
     <menuitem id="menu_retain_call_history" name="Historial de Llamadas" parent="menu_retain_call_submenu" action="action_retain_call_history" sequence="1"/>
-
-
 </odoo>

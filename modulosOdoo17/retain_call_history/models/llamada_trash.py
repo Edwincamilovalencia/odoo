@@ -22,7 +22,7 @@ class RetainCallHistoryTrash(models.Model):
         default=fields.Datetime.now,
         readonly=True
     )
-    notes = fields.Text(string='Notas de la llamada')
+    description_llamada = fields.Text(string='Descripción de la llamada')
     duration = fields.Float(string='Duración (minutos)')
     duration_ms = fields.Integer(string='Duración (ms)')
     direction = fields.Selection([
@@ -43,7 +43,7 @@ class RetainCallHistoryTrash(models.Model):
             'name': self.name,
             'phone': self.phone,
             'call_status': self.call_status,
-            'notes': self.notes,
+            'description_llamada': self.description_llamada,
             'duration': self.duration,
             'duration_ms': self.duration_ms,
             'direction': self.direction,
