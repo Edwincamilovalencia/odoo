@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_politico_partido_admin,access.politico.partido.admin,model_politico_partido,base.group_system,1,1,1,1
+access_politico_partido_readonly,access.politico.partido.readonly,model_politico_partido,partidos_politicos.group_partidos_politicos_readonly,1,0,0,0
+access_politico_asignacion_admin,access.politico.asignacion.admin,model_politico_asignacion,base.group_system,1,1,1,1
+access_politico_asignacion_readonly,access.politico.asignacion.readonly,model_politico_asignacion,partidos_politicos.group_partidos_politicos_readonly,1,0,0,0
+access_politico_carga_admin,access.politico.carga.admin,model_politico_carga,base.group_system,1,1,1,1
+access_politico_carga_readonly,access.politico.carga.readonly,model_politico_carga,partidos_politicos.group_partidos_politicos_readonly,1,0,1,0

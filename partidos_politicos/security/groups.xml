@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <data noupdate="1">
+    <!-- Grupo de solo lectura para usuarios que pueden ver su partido y cargar archivos,pero no pueden administrar asignaciones ni partidos.-->
+    <record id="group_partidos_politicos_readonly" model="res.groups">
+      <field name="name">Partidos Políticos: Lectura</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+  </data>
+</odoo>

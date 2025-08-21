@@ -1,0 +1,10 @@
+/* Add a subtle fade-out for Odoo notifications */
+.o_notification_manager .o_notification {
+  animation: partidosFadeOut 0.8s ease-in-out forwards;
+  animation-delay: 4.2s; /* starts fading just before the 5s redirect */
+}
+
+@keyframes partidosFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
