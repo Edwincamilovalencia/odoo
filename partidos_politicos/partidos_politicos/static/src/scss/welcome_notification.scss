@@ -1,0 +1,120 @@
+/* Banner flotante personalizado para bienvenida, siempre a la izquierda debajo del control panel */
+
+// Para admin: position relative para que nunca se superponga ni desaparezca
+.pp-welcome-banner {
+  position: relative;
+  left: unset;
+  margin-top: 0.5rem;
+  margin-left: 12px;
+  margin-bottom: 0.5rem;
+  width: 410px;
+  max-width: 96vw;
+  background: linear-gradient(90deg, #f8fafc 80%, #e8f5e9 100%);
+  border-left: 4px solid #27ae60;
+  border-radius: 7px;
+  box-shadow: 0 2px 8px 0 rgba(60,60,60,0.07);
+  color: #222;
+  border: 1px solid #e3e7ea;
+  z-index: 9999;
+  padding: 0.85rem 1.3rem 0.85rem 1.1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  animation: pp-welcome-fadein 0.5s;
+  transition: opacity 0.7s, box-shadow 0.2s;
+  align-self: flex-start;
+}
+.pp-welcome-banner.pp-welcome-admin {
+  background: linear-gradient(90deg, #e3f2fd 80%, #f8fafc 100%);
+  border-left: 4px solid #1976d2;
+}
+.pp-welcome-icon {
+  flex-shrink: 0;
+  width: 2.1em;
+  height: 2.1em;
+  margin-top: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8f5e9;
+  border-radius: 50%;
+  border: 1.5px solid #b2dfdb;
+  box-shadow: 0 1px 3px 0 rgba(39,174,96,0.07);
+}
+.pp-welcome-title {
+  font-weight: 600;
+  color: #219150;
+  margin-bottom: 0.18em;
+  font-size: 1.08em;
+  letter-spacing: 0.01em;
+}
+.pp-welcome-msg {
+  font-size: 1em;
+  color: #2d3a3a;
+  margin-bottom: 0.1em;
+}
+.pp-welcome-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.pp-welcome-hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s;
+}
+@keyframes pp-welcome-fadein {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: none; }
+}
+@media (max-width: 600px) {
+  .pp-welcome-banner {
+    width: 98vw;
+    min-width: 0;
+    padding: 0.7rem 0.7rem 0.7rem 0.7rem;
+    font-size: 0.98em;
+  }
+  .pp-welcome-title { font-size: 1em; }
+  .pp-welcome-icon { width: 1.7em; height: 1.7em; }
+}
+
+/* Notificación personalizada a la izquierda para admin y solo lectura */
+.o_notification_manager .o_notification.pp-notification-left {
+  left: 24px !important;
+  right: auto !important;
+  top: 60px !important;
+  transform: none !important;
+  min-width: 320px;
+  max-width: 420px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+  background: #fff;
+  color: #222;
+  border: 1px solid #e0e0e0;
+  z-index: 9999;
+}
+
+@media (max-width: 600px) {
+  .o_notification_manager .o_notification.pp-notification-left {
+    left: 8px !important;
+    min-width: 180px;
+    max-width: 95vw;
+  }
+}
+
+/* Fade-out para todas las notificaciones */
+.o_notification_manager .o_notification {
+  animation: partidosFadeOut 0.8s ease-in-out forwards;
+  animation-delay: 4.2s;
+}
+
+@keyframes partidosFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Anclar todo el contenedor de notificaciones a la izquierda cuando se active nuestra clase */
+.o_notification_manager.pp-notification-manager-left {
+  left: 16px !important;
+  right: auto !important;
+}

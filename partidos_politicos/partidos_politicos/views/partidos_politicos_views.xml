@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Acción admin para cargas -->
+    <record id="action_politico_carga_admin" model="ir.actions.act_window">
+      <field name="name">Cargas de archivos</field>
+      <field name="res_model">politico.carga</field>
+      <field name="view_mode">tree,form</field>
+      <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+      <field name="views" eval="[
+        (ref('view_politico_carga_tree_admin'), 'tree'),
+        (ref('view_politico_carga_form_admin'), 'form')
+      ]"/>
+    </record>
+
+    <!-- Menú admin para cargas -->
+    <menuitem id="menu_politico_carga_admin" name="Cargas" parent="menu_politico_root_admin"
+              action="action_politico_carga_admin" sequence="20" groups="base.group_system"/>
+
+    <!-- ==================== VISTAS ADMIN ==================== -->
+
+    <!-- Tree para administradores -->
+    <record id="view_politico_asignacion_tree" model="ir.ui.view">
+      <field name="name">politico.asignacion.tree</field>
+      <field name="model">politico.asignacion</field>
+      <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+      <field name="arch" type="xml">
+        <tree string="Asignación de partidos políticos">
+          <field name="user_id"/>
+          <field name="partido_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Formulario para administradores -->
+    <record id="view_politico_asignacion_form" model="ir.ui.view">
+      <field name="name">politico.asignacion.form</field>
+      <field name="model">politico.asignacion</field>
+      <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+      <field name="arch" type="xml">
+        <form string="Asignación de partido político">
+          <sheet>
+            <group>
+              <field name="user_id"/>
+              <field name="partido_id"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- ==================== VISTAS SOLO LECTURA ==================== -->
+
+  <!-- Tree para solo lectura (ya no se usa en menú, pero se deja para referencia) -->
+    <record id="view_politico_asignacion_tree_readonly" model="ir.ui.view">
+      <field name="name">politico.asignacion.tree.readonly</field>
+      <field name="model">politico.asignacion</field>
+      <field name="groups_id" eval="[(4, ref('partidos_politicos.group_partidos_politicos_readonly'))]"/>
+      <field name="arch" type="xml">
+        <tree string="Mi asignación de partido político" create="false" edit="false" delete="false">
+          <field name="user_id"/>
+          <field name="partido_id"/>
+        </tree>
+      </field>
+    </record>
+
+  <!-- Formulario solo lectura con mensaje (sin carga aquí) -->
+    <record id="view_politico_asignacion_form_readonly" model="ir.ui.view">
+      <field name="name">politico.asignacion.form.readonly</field>
+      <field name="model">politico.asignacion</field>
+      <field name="groups_id" eval="[(4, ref('partidos_politicos.group_partidos_politicos_readonly'))]"/>
+      <field name="arch" type="xml">
+        <form string="Mi información de partido político" create="false" edit="false" delete="false">
+          <group>
+            <separator string="Información"/>
+            <div class="alert alert-info" role="alert">
+              <strong>¡Hola <field name="user_id" readonly="1" nolabel="1"/>!</strong><br/>
+              Usted pertenece al partido político:
+              <strong><field name="partido_id" readonly="1" nolabel="1"/></strong>
+            </div>
+          </group>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- ==================== ACCIONES ==================== -->
+
+    <!-- Acción administrador -->
+    <record id="action_politico_asignacion" model="ir.actions.act_window">
+      <field name="name">Asignaciones de partido</field>
+      <field name="res_model">politico.asignacion</field>
+      <field name="view_mode">tree,form</field>
+      <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+
+      <!-- Client action to show 5s welcome notification then redirect to Mi Partido (readonly) -->
+      <record id="action_politico_asignacion_welcome" model="ir.actions.client">
+        <field name="name">Mi partido político</field>
+        <field name="tag">partidos_politicos_welcome</field>
+      </record>
+
+    <!-- ==================== CARGAS (SUBIDAS) ==================== -->
+
+    <!-- Vistas admin para cargas (no expuestas en menú por ahora) -->
+    <record id="view_politico_carga_tree_admin" model="ir.ui.view">
+      <field name="name">politico.carga.tree.admin</field>
+      <field name="model">politico.carga</field>
+      <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+      <field name="arch" type="xml">
+  <tree string="Cargas de archivos (admin)" js_class="o_list_view pp-carga-list-modern">
+          <field name="upload_datetime"/>
+          <field name="user_id"/>
+          <field name="partido_id"/>
+          <field name="filename"/>
+          <field name="file_type"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_politico_carga_form_admin" model="ir.ui.view">
+      <field name="name">politico.carga.form.admin</field>
+      <field name="model">politico.carga</field>
+      <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+      <field name="arch" type="xml">
+        <form string="Carga de archivo (admin)">
+          <sheet>
+            <group col="2">
+              <group>
+                <field name="upload_datetime" readonly="1"/>
+                <field name="user_id"/>
+                <field name="partido_id"/>
+              </group>
+              <group>
+                <field name="upload_file" filename="filename" accept=".csv,.xlsx,.xls"/>
+                <field name="filename"/>
+                <field name="file_type"/>
+              </group>
+            </group>
+            <!-- Previsualización del archivo (si no hay archivo, el compute mostrará mensaje/estará vacío) -->
+            <group col="1">
+              <separator string="Previsualización"/>
+              <field name="preview_html" readonly="1" widget="html" nolabel="1" options="{'sanitize': False}"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Vistas solo lectura para cargas -->
+    <record id="view_politico_carga_tree_readonly" model="ir.ui.view">
+      <field name="name">politico.carga.tree.readonly</field>
+      <field name="model">politico.carga</field>
+      <field name="groups_id" eval="[(4, ref('partidos_politicos.group_partidos_politicos_readonly'))]"/>
+      <field name="arch" type="xml">
+  <tree string="Mis cargas de archivos" create="true" edit="false" delete="false" js_class="o_list_view pp-carga-list-modern">
+          <field name="upload_datetime" string="Fecha y hora de carga"/>
+          <field name="user_id" string="Persona"/>
+          <field name="partido_id" string="Partido político"/>
+          <field name="filename" string="Nombre de archivo"/>
+          <field name="file_type" string="Tipo de archivo"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_politico_carga_form_readonly" model="ir.ui.view">
+      <field name="name">politico.carga.form.readonly</field>
+      <field name="model">politico.carga</field>
+      <field name="groups_id" eval="[(4, ref('partidos_politicos.group_partidos_politicos_readonly'))]"/>
+      <field name="arch" type="xml">
+      <form string="Subir archivo" edit="false" delete="false">
+        <sheet>
+          <group col="2">
+            <group>
+              <field name="upload_file" filename="filename" accept=".csv,.xlsx,.xls"/>
+              <field name="filename"/>
+              <field name="upload_datetime" readonly="1"/>
+            </group>
+            <group>
+              <field name="file_type"/>
+              <field name="user_id" readonly="1"/>
+              <field name="partido_id" readonly="1"/>
+            </group>
+          </group>
+          <!-- Previsualización del archivo (si no hay archivo, el compute mostrará mensaje/estará vacío) -->
+          <group col="1">
+            <separator string="Previsualización"/>
+            <field name="preview_html" readonly="1" widget="html" nolabel="1" options="{'sanitize': False}"/>
+          </group>
+        </sheet>
+      </form>
+      </field>
+    </record>
+
+    <!-- Acción solo lectura que apunta a cargas -->
+    <record id="action_politico_carga_readonly" model="ir.actions.act_window">
+      <field name="name">Mis cargas</field>
+      <field name="res_model">politico.carga</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[("user_id", "=", uid)]</field>
+      <field name="groups_id" eval="[(4, ref('partidos_politicos.group_partidos_politicos_readonly'))]"/>
+      <field name="views" eval="[
+        (ref('view_politico_carga_tree_readonly'), 'tree'),
+        (ref('view_politico_carga_form_readonly'), 'form')
+      ]"/>
+    </record>
+
+
+    <!-- ==================== MENÚS ==================== -->
+
+    <!-- Menú raíz exclusivo para ADMIN -->
+    <menuitem id="menu_politico_root_admin" name="Partidos Políticos" sequence="10"
+              groups="base.group_system"/>
+    <menuitem id="menu_politico_asignacion" name="Asignaciones" parent="menu_politico_root_admin"
+              action="action_politico_asignacion" sequence="10" groups="base.group_system"/>
+
+    <!-- Menú raíz exclusivo para SOLO LECTURA -->
+  <menuitem id="menu_politico_root_readonly" name="Partidos Políticos" sequence="20"
+              groups="partidos_politicos.group_partidos_politicos_readonly"/>
+    <menuitem id="menu_politico_mi_partido" name="Mi Partido" parent="menu_politico_root_readonly"
+                action="action_politico_carga_readonly" sequence="10"
+              groups="partidos_politicos.group_partidos_politicos_readonly"/>
+
+  </data>
+</odoo>
+
