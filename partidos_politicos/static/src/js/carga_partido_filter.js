@@ -121,10 +121,10 @@ patch(ListController.prototype, {
 
     _injectPartidoDropdown(cp) {
         if (document.getElementById('pp_partido_filter_dropdown')) return;
-        // Wrapper for centering below search
-        const wrapper = document.createElement('div');
-        wrapper.id = 'pp_partido_filter_dropdown';
-        wrapper.className = 'pp-partido-dropdown-bar pp-dropdown-below-search';
+    // Wrapper para alinear a la derecha
+    const wrapper = document.createElement('div');
+    wrapper.id = 'pp_partido_filter_dropdown';
+    wrapper.className = 'pp-partido-dropdown-bar pp-dropdown-right';
 
         // Dropdown button
         const btn = document.createElement('button');
@@ -218,24 +218,9 @@ patch(ListController.prototype, {
     wrapper.appendChild(innerBar);
     wrapper.appendChild(menu);
 
-        // Insert below search bar, centered
-        const search = cp.querySelector('.o_searchview');
-        if (search && search.parentElement) {
-            // Create a full-width row below search
-            let belowRow = cp.querySelector('.pp-dropdown-below-row');
-            if (!belowRow) {
-                belowRow = document.createElement('div');
-                belowRow.className = 'pp-dropdown-below-row';
-                belowRow.style.width = '100%';
-                belowRow.style.display = 'flex';
-                belowRow.style.justifyContent = 'center';
-                belowRow.style.marginTop = '0.5em';
-                search.parentElement.appendChild(belowRow);
-            }
-            belowRow.appendChild(wrapper);
-        } else {
-            cp.appendChild(wrapper);
-        }
+    // Insertar a la derecha del control panel
+    const cpRight = cp.querySelector('.o_cp_bottom_right') || cp;
+    cpRight.appendChild(wrapper);
 
     // handlers already attached above
     },

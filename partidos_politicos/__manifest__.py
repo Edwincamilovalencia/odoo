@@ -20,9 +20,11 @@
         'web.assets_backend': [
             'partidos_politicos/static/src/js/welcome_notification.js',
             'partidos_politicos/static/src/js/carga_partido_filter.js',
+            'partidos_politicos/static/src/js/party_banner.js',
             'partidos_politicos/static/src/xml/welcome_notification.xml',
             'partidos_politicos/static/src/scss/welcome_notification.scss',
             'partidos_politicos/static/src/scss/carga_partido_filter.scss',
+            'partidos_politicos/static/src/scss/party_banner.scss',
         ],
     },
     'installable': True,

@@ -1,0 +1,27 @@
+// Styles for the centered party banner under the search bar (readonly users)
+#pp_party_banner.pp-party-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0 4px 0;
+}
+.pp-party-banner__inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #ede7f6;
+  box-shadow: 0 2px 12px rgba(111,66,193,0.06);
+}
+.pp-party-banner__logo {
+  height: 84px; // triple the original 28px
+  width: auto;
+  object-fit: contain;
+}
+.pp-party-banner__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b2e83;
+}

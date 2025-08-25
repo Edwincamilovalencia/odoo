@@ -126,15 +126,22 @@
       <field name="arch" type="xml">
         <form string="Carga de archivo (admin)">
           <sheet>
-            <group>
-              <field name="upload_datetime" readonly="1"/>
-              <field name="user_id"/>
-              <field name="partido_id"/>
+            <group col="2">
+              <group>
+                <field name="upload_datetime" readonly="1"/>
+                <field name="user_id"/>
+                <field name="partido_id"/>
+              </group>
+              <group>
+                <field name="upload_file" filename="filename" accept=".csv,.xlsx,.xls"/>
+                <field name="filename"/>
+                <field name="file_type"/>
+              </group>
             </group>
-            <group>
-              <field name="upload_file" filename="filename" accept=".csv,.xlsx,.xls"/>
-              <field name="filename"/>
-              <field name="file_type"/>
+            <!-- Previsualización del archivo (si no hay archivo, el compute mostrará mensaje/estará vacío) -->
+            <group col="1">
+              <separator string="Previsualización"/>
+              <field name="preview_html" readonly="1" widget="html" nolabel="1" options="{'sanitize': False}"/>
             </group>
           </sheet>
         </form>
@@ -162,20 +169,27 @@
       <field name="model">politico.carga</field>
       <field name="groups_id" eval="[(4, ref('partidos_politicos.group_partidos_politicos_readonly'))]"/>
       <field name="arch" type="xml">
-    <form string="Subir archivo" edit="false" delete="false">
-          <sheet>
+      <form string="Subir archivo" edit="false" delete="false">
+        <sheet>
+          <group col="2">
             <group>
               <field name="upload_file" filename="filename" accept=".csv,.xlsx,.xls"/>
               <field name="filename"/>
+              <field name="upload_datetime" readonly="1"/>
             </group>
             <group>
-              <field name="upload_datetime" readonly="1"/>
-      <field name="file_type"/>
+              <field name="file_type"/>
               <field name="user_id" readonly="1"/>
-      <field name="partido_id" readonly="1"/>
+              <field name="partido_id" readonly="1"/>
             </group>
-          </sheet>
-        </form>
+          </group>
+          <!-- Previsualización del archivo (si no hay archivo, el compute mostrará mensaje/estará vacío) -->
+          <group col="1">
+            <separator string="Previsualización"/>
+            <field name="preview_html" readonly="1" widget="html" nolabel="1" options="{'sanitize': False}"/>
+          </group>
+        </sheet>
+      </form>
       </field>
     </record>
 

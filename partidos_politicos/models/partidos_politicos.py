@@ -43,6 +43,8 @@ class PartidoAsignacion(models.Model):
             'user_name': user.name,
             'partido_name': asign.partido_id.name if asign and asign.partido_id else '',
             'is_readonly_user': user.has_group('partidos_politicos.group_partidos_politicos_readonly'),
+            # Administrador real del sistema
+            'is_admin_user': user.has_group('base.group_system'),
         }
 
     def name_get(self):
@@ -68,7 +70,8 @@ class PartidoCarga(models.Model):
         default=lambda self: self._default_partido_id(),
         readonly=True,
     )
-    upload_file = fields.Binary(string='Archivo', required=True)
+    # Guardar binario como adjunto para poder recuperarlo fácilmente y no devolver solo el tamaño
+    upload_file = fields.Binary(string='Archivo', required=True, attachment=True)
     filename = fields.Char(string='Nombre de archivo')
     file_type = fields.Selection(
         [('xlsx', 'Excel (.xlsx)'), ('xls', 'Excel 97-2003 (.xls)'), ('csv', 'CSV')],
