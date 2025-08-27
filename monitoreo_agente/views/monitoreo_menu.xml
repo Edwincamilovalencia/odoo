@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menú principal Monitoreo y submenús con acciones -->
+    <menuitem id="menu_monitoreo_root" name="Monitoreo" sequence="10"/>
+    <!-- Dashboard: vista kanban principal -->
+    <menuitem id="menu_monitoreo_dashboard" name="Dashboard" parent="menu_monitoreo_root" action="action_monitoreo_dashboard_kanban" sequence="1"/>
+    <!-- Submenús individuales conservados -->
+    <menuitem id="menu_monitoreo_call" name="Llamadas" parent="menu_monitoreo_root" action="action_monitoreo_call" sequence="2"/>
+    <menuitem id="menu_monitoreo_agent" name="Agentes" parent="menu_monitoreo_root" action="action_monitoreo_agent" sequence="3"/>
+    <menuitem id="menu_monitoreo_alert" name="Alertas" parent="menu_monitoreo_root" action="action_monitoreo_alert" sequence="4"/>
+</odoo>

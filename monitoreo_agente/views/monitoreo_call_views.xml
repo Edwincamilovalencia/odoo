@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista gráfica específica para llamadas de un agente -->
+    <record id="view_monitoreo_call_graph_agent" model="ir.ui.view">
+        <field name="name">monitoreo.call.graph.agent</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <graph string="Llamadas del Agente - Últimos 7 días" type="bar">
+                <field name="start_datetime" type="row" interval="day"/>
+                <field name="duration" type="measure" operator="sum" string="Duración total (min)"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vista gráfica por defecto para llamadas -->
+    <record id="view_monitoreo_call_graph" model="ir.ui.view">
+        <field name="name">monitoreo.call.graph</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <graph string="Llamadas" type="bar">
+                <field name="start_datetime" type="row" interval="day"/>
+                <field name="duration" type="measure" operator="sum"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vista Timeline/Gantt para mostrar verdadera línea de tiempo de llamadas -->
+    <record id="view_monitoreo_call_timeline" model="ir.ui.view">
+        <field name="name">monitoreo.call.timeline</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <gantt string="Línea de Tiempo de Llamadas" 
+                   date_start="start_datetime" 
+                   date_stop="end_datetime"
+                   default_group_by="agent_id"
+                   color="state"
+                   precision="{'hour': 'long'}"
+                   scales="day,week,month">
+                <field name="agent_id"/>
+                <field name="state"/>
+                <field name="number_from"/>
+                <field name="number_to"/>
+                <field name="duration"/>
+            </gantt>
+        </field>
+    </record>
+
+    <!-- Vista Timeline embebida simplificada -->
+    <record id="view_monitoreo_call_timeline_embedded" model="ir.ui.view">
+        <field name="name">monitoreo.call.timeline.embedded</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <tree string="Llamadas del Agente">
+                <field name="start_datetime"/>
+                <field name="end_datetime"/>
+                <field name="duration"/>
+                <field name="state"/>
+                <field name="number_from"/>
+                <field name="number_to"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Vista de búsqueda para filtros de llamadas -->
+    <record id="view_monitoreo_call_search" model="ir.ui.view">
+        <field name="name">monitoreo.call.search</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Llamadas">
+                <field name="agent_id"/>
+                <field name="state"/>
+                <filter name="last_7_days" string="Últimos 7 días" domain="[('start_datetime', '>=', (context_today() - relativedelta(days=7)))]" help="Llamadas de los últimos 7 días"/>
+            </search>
+        </field>
+    </record>
+    <!-- Vistas de Llamadas -->
+    <record id="view_monitoreo_call_tree" model="ir.ui.view">
+        <field name="name">monitoreo.call.tree</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <tree string="Llamadas">
+                <field name="start_datetime"/>
+                <field name="duration"/>
+                <field name="state"/>
+                <field name="agent_id"/>
+                <field name="number_from"/>
+                <field name="number_to"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Eliminado: acción timeline con active_id (deprecated) -->
+
+    <record id="view_monitoreo_call_form" model="ir.ui.view">
+        <field name="name">monitoreo.call.form</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <form string="Llamada">
+                <!-- header sin botón de línea de tiempo -->
+                <header/>
+                <sheet>
+                    <group>
+                        <field name="start_datetime"/>
+                        <field name="duration" modifiers='{"readonly": [["state", "=", "failed"]]}'/>
+                        <field name="state"/>
+                        <field name="agent_id"/>
+                        <field name="number_from"/>
+                        <field name="number_to"/>
+                    </group>
+                    
+                    <!-- Gráfico embebido: línea de tiempo de la llamada (in/out) -->
+                    <notebook>
+                        <page string="Línea de Tiempo de la Llamada">
+                            <div class="o_timeline_view" style="height: 300px; padding: 20px;">
+                                <h4>Timeline de la Llamada</h4>
+                                <div class="timeline-container" style="position: relative; height: 200px; border: 1px solid #ddd; margin: 10px 0;">
+                                    <!-- Línea de tiempo visual -->
+                                    <div style="position: absolute; top: 50%; left: 50px; right: 50px; height: 2px; background: #007cba;"></div>
+                                    
+                                    <!-- Punto de inicio (IN) -->
+                                    <div style="position: absolute; top: 40%; left: 50px; width: 20px; height: 20px; background: green; border-radius: 50%; z-index: 10;">
+                                        <div style="position: absolute; top: 25px; left: -15px; font-size: 10px; font-weight: bold;">IN</div>
+                                    </div>
+                                    
+                                    <!-- Punto de fin (OUT) -->
+                                    <div style="position: absolute; top: 40%; right: 50px; width: 20px; height: 20px; background: red; border-radius: 50%; z-index: 10;">
+                                        <div style="position: absolute; top: 25px; left: -20px; font-size: 10px; font-weight: bold;">OUT</div>
+                                    </div>
+                                    
+                                    <!-- Información de tiempo -->
+                                    <div style="position: absolute; top: 70%; left: 50px; font-size: 12px;">
+                                        <field name="start_datetime" readonly="1"/>
+                                    </div>
+                                    <div style="position: absolute; top: 70%; right: 50px; font-size: 12px;">
+                                        <field name="end_datetime" readonly="1"/>
+                                    </div>
+                                    
+                                    <!-- Duración en el centro -->
+                                    <div style="position: absolute; top: 20%; left: 50%; transform: translateX(-50%); font-size: 14px; font-weight: bold; color: #007cba;">
+                                        Duración: <field name="duration" readonly="1"/> minutos
+                                    </div>
+                                    
+                                    <!-- Estado de la llamada -->
+                                    <div style="position: absolute; top: 85%; left: 50%; transform: translateX(-50%); font-size: 12px;">
+                                        Estado: <field name="state" readonly="1"/>
+                                    </div>
+                                </div>
+                                
+                                <!-- Información adicional -->
+                                <div style="margin-top: 20px;">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <div>
+                                            <strong>Número de Origen:</strong> <field name="number_from" readonly="1"/>
+                                        </div>
+                                        <div>
+                                            <strong>Número de Destino:</strong> <field name="number_to" readonly="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción de Llamadas -->
+    <record id="action_monitoreo_call" model="ir.actions.act_window">
+        <field name="name">Llamadas</field>
+        <field name="res_model">monitoreo.call</field>
+        <field name="view_mode">tree,form,graph,gantt</field>
+    </record>
+    <!-- Acción específica para la vista timeline/gantt de llamadas -->
+    <record id="action_monitoreo_call_timeline" model="ir.actions.act_window">
+        <field name="name">Línea de Tiempo de Llamadas</field>
+        <field name="res_model">monitoreo.call</field>
+        <field name="view_mode">gantt</field>
+        <field name="view_id" ref="view_monitoreo_call_timeline"/>
+        <field name="target">new</field>
+        <field name="context">{'search_default_agent_id': active_id}</field>
+    </record>
+</odoo>

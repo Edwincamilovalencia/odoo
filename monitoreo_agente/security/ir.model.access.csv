@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_monitoreo_agent,access.monitoreo.agent,model_monitoreo_agent,base.group_user,1,1,1,1
+access_monitoreo_call,access.monitoreo.call,model_monitoreo_call,base.group_user,1,1,1,1
+access_monitoreo_alert,access.monitoreo.alert,model_monitoreo_alert,base.group_user,1,1,1,1
+access_monitoreo_dashboard,access.monitoreo.dashboard,model_monitoreo_dashboard,base.group_user,1,0,0,0
