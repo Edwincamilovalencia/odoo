@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="project_project_inherit_view_form_ox" model="ir.ui.view">
+            <field name="name">project.project.inherit.view.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project" />
+            <field name="arch" type="xml">
+                <!-- Botones header -->
+
+                <xpath expr="//form/header" position="inside">
+                    <button name="action_submit_for_approval" string="ENVIAR A APROBACIÓN"
+                        type="object" class="btn-success"
+                        modifiers="{'invisible': [('state', '!=', 'planeacion')]}" />
+
+                    <button name="action_approve" string="APROBAR" type="object"
+                        class="btn-success"
+                        modifiers="{'invisible': [('state', '!=', 'en_aprobacion'), ('can_approve', '=', False)]}" />
+
+                    <button name="action_request_specifications" string="PEDIR ESPECIFIACIONES"
+                        type="object" class="btn btn-danger"
+                        modifiers="{'invisible': [('state', '!=', 'en_aprobacion'), ('can_approve', '=', False)]}" />
+                    <field name="state" widget="statusbar" options="{'clickable': False}" />
+                </xpath>
+
+
+                <xpath expr="//form/sheet" position="inside">
+                    <field name="can_approve" invisible="1" />
+                </xpath>
+
+
+                <xpath expr="//form/sheet/group" position="inside">
+                    <group>
+                        <field name="cronograma" string="Cronograma" widget="binary"
+                            help="Adjunta el cronograma del proyecto en formato PDF u otro archivo compatible." />
+                    </group>
+                </xpath>
+
+                <xpath expr="//field[@name='cronograma']" position="after">
+                    <field name="project_type_id" />
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="Alcance">
+                        <group>
+                            <field name="scope_ids">
+                                <tree editable="bottom">
+                                    <field name="name" string="Nombre" />
+                                    <field name="description" string="Descripción" />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+    <!-- Pestaña de Objetivos Generales -->
+    <page name="pg_general_objectives" string="Objetivos">
+        <group>
+            <field name="general_objectives" options="{'resizable': false}" placeholder="Objetivos Generales..." />
+        </group>
+        <group>
+            <field name="specific_objectives_ids">
+                <tree editable="bottom">
+                    <field name="name" string="Objetivo Específico" />
+                    <field name="task_count" string="# Actividades" />
+                    <field name="progress_display" readonly="1"/>
+                    <button name="open_tasks_from_objective" string="Ver Actividades" type="object" icon="fa-tasks" />
+                </tree>
+            </field>
+        </group>
+    </page>
+
+    <!-- Pestaña de Justificación -->
+    <page name="pg_justification" string="Justificación">
+        <field name="justification" options="{'resizable': false}" placeholder="Justificación..." />
+    </page>
+
+    <!-- Nueva pestaña de Stakeholders (antes de Otras Especificaciones) -->
+    <page name="pg_stakeholders" string="Stakeholders">
+        <field name="stakeholder_ids">
+            <tree editable="bottom">
+                <field name="name" string="Nombre" />
+                <field name="email" string="Correo" />
+                <field name="role" string="Rol" />
+                <field name="phone" string="Teléfono" />
+            </tree>
+        </field>
+    </page>
+
+    <!-- Pestaña de Otras Especificaciones -->
+    <page name="pg_other_specifications" string="Otras Especificaciones">
+        <field name="other_specifications" options="{'resizable': false}" placeholder="Otras especificaciones..." />
+    </page>
+
+    <!-- Pestaña de Aprobación (al final) -->
+    <page name="pg_approval" string="Aprobación">
+        <group>
+            <field name="state" readonly="1" />
+            <field name="approval_status" readonly="1" />
+        </group>
+
+        <group string="Aprobadores">
+            <field name="approver_ids" modifiers="{'readonly': [('state', '!=', 'planeacion')]}">
+                <tree>
+                    <field name="name" string="Nombre" />
+                </tree>
+            </field>
+        </group>
+
+        <group string="Aprobado Por">
+            <field name="approval_history_ids" readonly="1">
+                <tree>
+                    <field name="approver_id" string="Nombre" />
+                    <field name="approval_date" string="Fecha de Aprobación" />
+                </tree>
+            </field>
+        </group>
+    </page>
+</xpath>
+
+                <!-- Botones de Presupuestos, Inventario y Tickets -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" name="action_view_budgets" type="object"
+                        icon="fa-money">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="budgets_count" nolabel="1" />
+                            </span>
+                            <span class="o_stat_text">Presupuestos</span>
+                        </div>
+                    </button>
+
+                    <button class="oe_stat_button" name="action_view_pickings" type="object"
+                        icon="fa-list">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="pickings_count" nolabel="1" />
+                            </span>
+                            <span class="o_stat_text">Inventario</span>
+                        </div>
+                    </button>
+
+                    <button class="oe_stat_button" type="object" icon="fa-ticket"
+                        name="action_view_tickets">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="helpdesk_ticket_count" nolabel="1" />
+                            </span>
+                            <span class="o_stat_text">Tickets</span>
+                        </div>
+                    </button>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

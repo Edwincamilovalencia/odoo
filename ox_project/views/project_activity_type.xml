@@ -1,0 +1,63 @@
+<odoo>
+
+    <record id="view_task_form_custom" model="ir.ui.view">
+        <field name="name">project.task.form.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <!-- 1. Etiqueta vinculada a project_id -->
+            <!-- <xpath expr="//field[@name='project_id']" position="before">
+                <label for="project_id"/>
+            </xpath>
+
+             2. Etiqueta vinculada a user_ids 
+            <xpath expr="//field[@name='user_ids']" position="before">
+                <label for="user_ids"/>
+            </xpath> -->
+            <!-- 3. Botones y estados -->
+
+            <xpath expr="//header" position="inside">
+                <field name="state" widget="statusbar"
+                       statusbar_visible="pending,in_progress,done,cancelled"
+                       statusbar_colors="{'pending':'orange','in_progress':'blue','done':'green','cancelled':'red'}"
+                       string="Estado"/>
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_start_activity"
+                            type="object"
+                            string="Iniciar"
+                            class="oe_highlight"
+                            icon="fa-play"
+                            modifiers="{'invisible': [('state', '!=', 'pending')]}" />
+                    <button name="action_finish_activity"
+                            type="object"
+                            string="Completar"
+                            class="btn-success"
+                            icon="fa-check"
+                            modifiers="{'invisible': [('state', '!=', 'in_progress')]}" />
+                    <button name="action_cancel_activity"
+                            type="object"
+                            string="Cancelar"
+                            class="btn-danger"
+                            icon="fa-times"
+                            modifiers="{'invisible': [('state', 'not in', ['pending', 'in_progress'])]}" />
+                </div>
+            </xpath>
+
+            <!-- 4. Dependencias -->
+            <xpath expr="//field[@name='task_properties']" position="before">
+                <group string="Dependencias">
+                    <label for="dependent_task_ids" string="Depende de:"/>
+                    <field name="dependent_task_ids" 
+                           widget="many2many_tags"
+                           context="{'default_project_id': project_id}"
+                           domain="[('project_id', '=', project_id)]"
+                           options="{'no_create': 'True'}"
+                           placeholder="Seleccionar tareas dependientes"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
