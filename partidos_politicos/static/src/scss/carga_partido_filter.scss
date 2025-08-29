@@ -1,0 +1,176 @@
+// Barra interna del dropdown: estilo horizontal, sin fondo ni sombra extra
+.pp-dropdown-innerbar {
+  display: flex; // Usa flexbox para alinear los elementos
+  align-items: center; // Centra verticalmente
+  gap: 0.7em; // Espacio entre elementos
+  justify-content: flex-end; // Alinea a la derecha
+  margin-bottom: 0;
+  background: none;
+  box-shadow: none;
+}
+// Botón para limpiar los filtros seleccionados
+.pp-clear-btn {
+  background: #f5f6fa;
+  border: 1.5px solid #d1c4e9;
+  border-radius: 18px;
+  color: #6f42c1;
+  padding: 0.35em 1.2em 0.35em 1em;
+  font-size: 1.01em;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(111,66,193,0.07);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+// Efecto hover/focus para el botón limpiar
+.pp-clear-btn:hover, .pp-clear-btn:focus {
+  background: #f3eafe;
+  color: #4b2e83;
+  box-shadow: 0 4px 16px rgba(111,66,193,0.13);
+}
+// Icono de la X en el botón limpiar
+.pp-clear-x {
+  font-size: 1.1em;
+  margin-right: 0.2em;
+  color: #bdbdbd;
+}
+// Estilo compacto para el dropdown del filtro de partido
+// Dropdown debajo de la búsqueda, centrado y elegante
+.pp-dropdown-below-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5em;
+}
+// Barra del dropdown de partidos, alineada a la derecha
+.pp-partido-dropdown-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  margin-bottom: 0;
+  min-width: 180px;
+  background: none;
+  box-shadow: none;
+}
+// Alinea el dropdown a la derecha
+.pp-dropdown-right {
+  float: right;
+  margin-right: 0.5em;
+}
+// Botón principal del dropdown
+.pp-dropdown-btn {
+  background: transparent;
+  border: 1px solid #d1c4e9;
+  border-radius: 16px;
+  color: #6f42c1;
+  padding: 0.25em 1.1em 0.25em 1em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
+  transition: background 0.2s, color 0.2s;
+  min-width: 120px;
+  letter-spacing: 0.01em;
+}
+// Efecto hover/focus para el botón del dropdown
+.pp-dropdown-btn:hover, .pp-dropdown-btn:focus {
+  background: #f3eafe;
+  color: #4b2e83;
+  box-shadow: 0 4px 16px rgba(111,66,193,0.13);
+}
+// Icono caret (flecha) en el botón del dropdown
+.pp-dropdown-btn .caret {
+  margin-left: 0.7em;
+  font-size: 1em;
+}
+// --- MINIMALISTA ---
+// Menú desplegable del dropdown de partidos
+.pp-dropdown-menu {
+  background: #fff;
+  border: 1px solid #ede7f6;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px 0 rgba(111,66,193,0.07);
+  min-width: 220px;
+  padding: 4px 0 4px 0;
+  max-height: 320px;
+  overflow: auto;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.13s, transform 0.13s;
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 110%;
+  transform: translateY(-10px) scale(0.98);
+}
+// Clase para mostrar el menú desplegable
+.pp-dropdown-open {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateY(0) scale(1) !important;
+}
+// Estilo de cada opción dentro del menú desplegable
+.pp-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.38em 1.1em;
+  cursor: pointer;
+  font-size: 1em;
+  color: #3d2461;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  font-weight: 400;
+  transition: background 0.18s, color 0.18s;
+}
+// Opción de acción (por ejemplo, "Todos")
+.pp-item-action {
+  font-weight: 600;
+  color: #5b35b3;
+}
+// Checkbox de cada partido en el menú
+.pp-dropdown-item.choice input[type="checkbox"] {
+  accent-color: #b39ddb;
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: 0.5em;
+  border-radius: 4px;
+  box-shadow: none;
+}
+// Caja de búsqueda dentro del menú desplegable
+.pp-search {
+  width: calc(100% - 1.2em);
+  margin: 6px 0.6em 8px 0.6em;
+  padding: 5px 9px;
+  border: 1px solid #ede7f6;
+  border-radius: 7px;
+  outline: none;
+  position: sticky;
+  top: 4px;
+  z-index: 2;
+  background: #fff;
+  font-size: 0.98em;
+}
+// Efecto hover y selección en las opciones del menú
+.pp-dropdown-item:hover, .pp-dropdown-item input:checked + label {
+  background: #f7f6fa;
+  color: #6f42c1;
+}
+// Radio button en el menú (si se usa)
+.pp-dropdown-item input[type="radio"] {
+  accent-color: #6f42c1;
+  margin-right: 0.5em;
+}
+// Etiqueta de cada opción en el menú
+.pp-dropdown-item label {
+  cursor: pointer;
+  margin-bottom: 0;
+  font-weight: 500;
+}

@@ -1,0 +1,25 @@
+// Estilos para el banner de partido centrado bajo la barra de búsqueda (usuarios solo lectura)
+#pp_party_banner.pp-party-banner {
+  display: flex; // Usa flexbox para centrar el banner
+  justify-content: center; // Centra horizontalmente
+  align-items: center; // Centra verticalmente
+  margin: 8px 0 4px 0; // Espaciado arriba y abajo
+}
+// Contenedor interno del banner, con fondo blanco y borde
+.pp-party-banner__inner {
+  display: inline-flex; // Elementos en línea y alineados
+  align-items: center;
+  gap: 10px; // Espacio entre logo y nombre
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #ede7f6;
+  box-shadow: 0 2px 12px rgba(111,66,193,0.06);
+}
+// Logo del partido en el banner
+.pp-party-banner__logo {
+  height: 84px; // triple del tamaño original (28px)
+  width: auto;
+  object-fit: contain;
+}
+

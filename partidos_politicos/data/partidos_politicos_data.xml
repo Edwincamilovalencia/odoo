@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Partidos tradicionales -->
+    <record id="liberal" model="politico.partido"><field name="name">Partido Liberal Colombiano</field></record>
+    <record id="conservador" model="politico.partido"><field name="name">Partido Conservador Colombiano</field></record>
+    <record id="centro_democratico" model="politico.partido"><field name="name">Centro Democrático</field></record>
+    <record id="alianza_verde" model="politico.partido"><field name="name">Alianza Verde</field></record>
+    <record id="cambio_radical" model="politico.partido"><field name="name">Cambio Radical</field></record>
+    <record id="partido_de_la_u" model="politico.partido"><field name="name">Partido de la U</field></record>
+    <!-- Partidos alternativos y movimientos -->
+    <record id="polo_democratico" model="politico.partido"><field name="name">Polo Democrático Alternativo</field></record>
+    <record id="mais" model="politico.partido"><field name="name">MAIS</field></record>
+    <record id="mira" model="politico.partido"><field name="name">MIRA</field></record>
+    <record id="comunes" model="politico.partido"><field name="name">Comunes</field></record>
+    <record id="colombia_humana" model="politico.partido"><field name="name">Colombia Humana</field></record>
+    <record id="dignidad" model="politico.partido"><field name="name">Dignidad</field></record>
+    <record id="liga_gobernantes_anticorrupcion" model="politico.partido"><field name="name">Liga de Gobernantes Anticorrupción</field></record>
+  </data>
+</odoo>
