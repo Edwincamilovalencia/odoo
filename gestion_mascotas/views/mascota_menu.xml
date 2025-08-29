@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+===========================================
+MENÚS DEL MÓDULO GESTIÓN DE MASCOTAS
+===========================================
+
+Este archivo define la estructura de menús que aparecen
+en la interfaz de Odoo.
+
+Jerarquía de menús:
+- Menú Principal (aparece en la barra superior)
+  └── Submenú (aparece en el panel lateral)
+-->
+
+<odoo>
+  <!-- 
+  ===========================================
+  MENÚ PRINCIPAL (ROOT)
+  ===========================================
+  Este es el menú principal que aparece en la barra superior de Odoo
+  -->
+  <menuitem 
+    id="menu_gestion_mascotas_root"    <!-- ID único del menú -->
+    name="Gestión Mascotas"            <!-- Texto que aparece en el menú -->
+    />
+    <!-- 
+    Al no tener 'parent', se crea como menú principal.
+    Al no tener 'action', solo actúa como contenedor.
+    -->
+
+  <!-- 
+  ===========================================
+  SUBMENÚ CON ACCIÓN
+  ===========================================
+  Este menú es hijo del anterior y ejecuta una acción al hacer clic
+  -->
+  <menuitem 
+    id="menu_gestion_mascotas"          <!-- ID único del submenú -->
+    name="Mascotas"                     <!-- Texto del submenú -->
+    parent="menu_gestion_mascotas_root" <!-- Menú padre (lo hace submenú) -->
+    action="action_mascota"             <!-- Acción a ejecutar al hacer clic -->
+    />
+    <!-- 
+    Flujo al hacer clic:
+    1. Se ejecuta 'action_mascota' (definida en mascota_views.xml)
+    2. La acción abre el modelo 'gestion.mascota'
+    3. Se muestra la vista 'tree' primero (lista de mascotas)
+    -->
+</odoo>

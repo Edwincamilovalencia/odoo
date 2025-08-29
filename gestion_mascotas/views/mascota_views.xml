@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+===========================================
+VISTAS PARA EL MODELO GESTION.MASCOTA
+===========================================
+
+Este archivo define las interfaces de usuario (vistas) 
+para el modelo de mascotas.
+
+Tipos de vistas principales:
+- Tree: Vista de lista/tabla
+- Form: Vista de formulario para crear/editar
+- Action: Acciones que conectan menús con vistas
+-->
+
+<odoo>
+  <!-- 
+  ===========================================
+  VISTA TREE (LISTA/TABLA)
+  ===========================================
+  Esta vista muestra los registros en formato de tabla
+  -->
+  <record id="view_mascota_tree" model="ir.ui.view">
+    <!-- Nombre técnico único de la vista -->
+    <field name="name">gestion.mascota.tree</field>
+    
+    <!-- Modelo al que pertenece esta vista -->
+    <field name="model">gestion.mascota</field>
+    
+    <!-- Estructura XML de la vista -->
+    <field name="arch" type="xml">
+      <tree>
+        <!-- Campos que se muestran como columnas en la tabla -->
+        <field name="name"/>        <!-- Columna: Nombre -->
+        <field name="edad"/>        <!-- Columna: Edad -->
+        <field name="propietario"/> <!-- Columna: Propietario -->
+      </tree>
+    </field>
+  </record>
+
+  <!-- 
+  ===========================================
+  VISTA FORM (FORMULARIO)
+  ===========================================
+  Esta vista permite crear y editar registros individuales
+  -->
+  <record id="view_mascota_form" model="ir.ui.view">
+    <!-- Nombre técnico único de la vista -->
+    <field name="name">gestion.mascota.form</field>
+    
+    <!-- Modelo al que pertenece esta vista -->
+    <field name="model">gestion.mascota</field>
+    
+    <!-- Estructura XML de la vista -->
+    <field name="arch" type="xml">
+      <form>
+        <!-- Grupo visual para organizar campos -->
+        <group>
+          <!-- Campos del formulario (aparecen como inputs) -->
+          <field name="name"/>        <!-- Input: Nombre -->
+          <field name="edad"/>        <!-- Input: Edad -->
+          <field name="propietario"/> <!-- Input: Propietario -->
+          <field name="descripcion"/> <!-- Textarea: Descripción -->
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <!-- 
+  ===========================================
+  ACCIÓN DE VENTANA
+  ===========================================
+  Define qué ocurre cuando se abre el módulo desde el menú
+  -->
+  <record id="action_mascota" model="ir.actions.act_window">
+    <!-- Título que aparece en la ventana -->
+    <field name="name">Mascotas</field>
+    
+    <!-- Modelo que se va a mostrar -->
+    <field name="res_model">gestion.mascota</field>
+    
+    <!-- Vistas disponibles (separadas por comas, en orden de prioridad) -->
+    <field name="view_mode">tree,form</field>
+    
+    <!-- 
+    Explicación del view_mode:
+    - tree: Vista de lista (aparece primero)
+    - form: Vista de formulario (se abre al hacer doble clic)
+    -->
+
+  <!-- 
+  ===========================================
+  MENÚ PRINCIPAL (ROOT)
+  ===========================================
+  Este es el menú principal que aparece en la barra superior de Odoo
+  -->
+  <menuitem 
+    id="menu_gestion_mascotas_root"    <!-- ID único del menú -->
+    name="Gestión Mascotas"            <!-- Texto que aparece en el menú -->
+    />
+    <!-- 
+    Al no tener 'parent', se crea como menú principal.
+    Al no tener 'action', solo actúa como contenedor.
+    -->
+
+  <!-- 
+  ===========================================
+  SUBMENÚ CON ACCIÓN
+  ===========================================
+  Este menú es hijo del anterior y ejecuta una acción al hacer clic
+  -->
+  <menuitem 
+    id="menu_gestion_mascotas"          <!-- ID único del submenú -->
+    name="Mascotas"                     <!-- Texto del submenú -->
+    parent="menu_gestion_mascotas_root" <!-- Menú padre (lo hace submenú) -->
+    action="action_mascota"             <!-- Acción a ejecutar al hacer clic -->
+    />
+    <!-- 
+    Flujo al hacer clic:
+    1. Se ejecuta 'action_mascota' (definida en mascota_views.xml)
+    2. La acción abre el modelo 'gestion.mascota'
+    3. Se muestra la vista 'tree' primero (lista de mascotas)
+    -->
+
+
+
+
+  </record>
+</odoo>

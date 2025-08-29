@@ -1,0 +1,65 @@
+﻿# ===========================================
+# ARCHIVO DE PERMISOS DE ACCESO
+# ===========================================
+# 
+# Este archivo CSV define quién puede hacer qué con el modelo Mascota.
+# Cada línea representa un conjunto de permisos.
+# 
+# ESTRUCTURA DE LAS COLUMNAS:
+# ---------------------------
+# 
+# id: Identificador único del permiso
+#     Formato recomendado: access_nombre_modelo
+# 
+# name: Nombre descriptivo del permiso
+#       Solo para documentación interna
+# 
+# model_id:id: ID del modelo al que se aplican los permisos
+#              Formato: model_nombre_del_modelo
+#              Odoo agrega automáticamente "model_" al _name del modelo
+# 
+# group_id:id: Grupo de usuarios que tendrá estos permisos
+#              Si está vacío = TODOS los usuarios
+#              Si tiene valor = Solo usuarios de ese grupo
+# 
+# perm_read: Permiso de LECTURA (ver registros)
+#            1 = Permitido, 0 = Denegado
+# 
+# perm_write: Permiso de ESCRITURA (editar registros)
+#             1 = Permitido, 0 = Denegado
+# 
+# perm_create: Permiso de CREACIÓN (crear nuevos registros)
+#              1 = Permitido, 0 = Denegado
+# 
+# perm_unlink: Permiso de ELIMINACIÓN (borrar registros)
+#              1 = Permitido, 0 = Denegado
+# 
+# EJEMPLO DE LA LÍNEA ACTUAL:
+# ---------------------------
+# access_gestion_mascota,access.gestion.mascota,model_gestion_mascota,,1,1,1,1
+# 
+# Traducción:
+# - ID: access_gestion_mascota
+# - Nombre: access.gestion.mascota  
+# - Modelo: model_gestion_mascota (se refiere a gestion.mascota)
+# - Grupo: (vacío) = todos los usuarios
+# - Leer: 1 = SÍ pueden ver mascotas
+# - Escribir: 1 = SÍ pueden editar mascotas
+# - Crear: 1 = SÍ pueden crear mascotas
+# - Eliminar: 1 = SÍ pueden borrar mascotas
+# 
+# EJEMPLOS DE OTROS PERMISOS:
+# ---------------------------
+# 
+# Solo lectura para todos:
+# access_mascota_read,Lectura Mascotas,model_gestion_mascota,,1,0,0,0
+# 
+# Permisos completos solo para administradores:
+# access_mascota_admin,Admin Mascotas,model_gestion_mascota,base.group_system,1,1,1,1
+# 
+# GRUPOS COMUNES EN ODOO:
+# -----------------------
+# base.group_user - Usuarios internos
+# base.group_system - Administradores del sistema
+# base.group_portal - Usuarios del portal
+# base.group_public - Usuarios públicos

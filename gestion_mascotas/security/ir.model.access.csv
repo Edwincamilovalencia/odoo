@@ -1,0 +1,2 @@
+﻿id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gestion_mascota,access.gestion.mascota,model_gestion_mascota,,1,1,1,1
