@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vistas de Alertas -->
+    <record id="view_monitoreo_alert_tree" model="ir.ui.view">
+        <field name="name">monitoreo.alert.tree</field>
+        <field name="model">monitoreo.alert</field>
+        <field name="arch" type="xml">
+            <tree string="Alertas" decoration-danger="severity=='critical'" decoration-warning="severity=='warning'" decoration-success="state=='resolved'">
+                <header>
+                    <button name="action_test_daily_check" type="object" string="Verificar llamadas diarias" class="btn-info"/>
+                </header>
+                <field name="date"/>
+                <field name="name"/>
+                <field name="alert_type"/>
+                <field name="severity"/>
+                <field name="state"/>
+                <button name="action_mark_resolved" type="object" string="Resolver" icon="fa-check" class="btn-success" invisible="state == 'resolved'"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_monitoreo_alert_form" model="ir.ui.view">
+        <field name="name">monitoreo.alert.form</field>
+        <field name="model">monitoreo.alert</field>
+        <field name="arch" type="xml">
+            <form string="Alerta">
+                <header>
+                    <button name="action_mark_resolved" type="object" string="Marcar como resuelta" class="btn-primary" invisible="state == 'resolved'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,resolved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Título de la alerta"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="alert_type"/>
+                            <field name="severity"/>
+                            <field name="agent_id"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="resolved_date" invisible="state != 'resolved'"/>
+                            <field name="resolved_by" invisible="state != 'resolved'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Descripción">
+                            <field name="description" placeholder="Descripción detallada de la alerta..."/>
+                        </page>
+                        <page string="Resolución" invisible="state != 'resolved'">
+                            <field name="resolution" placeholder="Detalles de cómo se resolvió la alerta..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Acción de Alertas -->
+    <record id="action_monitoreo_alert" model="ir.actions.act_window">
+        <field name="name">Alertas</field>
+        <field name="res_model">monitoreo.alert</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

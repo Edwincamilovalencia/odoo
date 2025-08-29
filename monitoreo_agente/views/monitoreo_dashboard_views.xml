@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Kanban para Dashboard -->
+    <record id="view_monitoreo_dashboard_kanban" model="ir.ui.view">
+        <field name="name">monitoreo.dashboard.kanban</field>
+        <field name="model">monitoreo.dashboard</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="dashboard_type"/>
+                <field name="icon"/>
+                <field name="color"/>
+                <field name="description"/>
+                <field name="count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_dashboard_tile" style="border: 2px solid #dee2e6; border-radius: 8px; margin: 10px; height: 180px;">
+                            <div class="o_dashboard_header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 6px 6px 0 0;">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; align-items: center;">
+                                        <i t-attf-class="fa {{record.icon.value}} fa-2x" t-attf-title="{{record.name.value}}" style="margin-right: 10px;"/>
+                                        <strong style="font-size: 16px;"><field name="name"/></strong>
+                                    </div>
+                                    <div style="font-size: 24px; font-weight: bold; display: flex; align-items: center;">
+                                        <field name="count"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_dashboard_content" style="padding: 15px; background: white; border-radius: 0 0 6px 6px; height: 90px; display: flex; align-items: center; justify-content: center;">
+                                <div style="text-align: center;">
+                                    <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                                        <field name="description"/>
+                                    </p>
+                                    <button name="action_open_dashboard" type="object" 
+                                            string="Ver Detalle" 
+                                            class="btn btn-primary btn-sm" 
+                                            style="margin-top: 10px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action para el Dashboard Kanban -->
+    <record id="action_monitoreo_dashboard_kanban" model="ir.actions.act_window">
+        <field name="name">Dashboard de Monitoreo</field>
+        <field name="res_model">monitoreo.dashboard</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_monitoreo_dashboard_kanban"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Acciones de análisis individuales (conservadas para compatibilidad) -->
+    <record id="action_monitoreo_call_by_day" model="ir.actions.act_window">
+        <field name="name">Llamadas por día (últimos 30 días)</field>
+        <field name="res_model">monitoreo.call</field>
+        <field name="view_mode">graph</field>
+        <field name="domain">[('start_datetime', '>=', (context_today() - relativedelta(days=30)))]</field>
+        <field name="context">{'graph_groupbys': ['start_datetime:day'], 'graph_measures': ['__count__'], 'graph_type': 'bar'}</field>
+    </record>
+    <record id="action_monitoreo_agent_state_today" model="ir.actions.act_window">
+        <field name="name">Estados de agentes (hoy)</field>
+        <field name="res_model">monitoreo.agent</field>
+        <field name="view_mode">graph</field>
+        <field name="context">{'graph_groupbys': ['state'], 'graph_type': 'pie', 'graph_measures': ['__count__']}</field>
+    </record>
+    <record id="action_monitoreo_call_by_hour_today" model="ir.actions.act_window">
+        <field name="name">Llamadas por hora (hoy)</field>
+        <field name="res_model">monitoreo.call</field>
+        <field name="view_mode">graph</field>
+        <field name="domain">[('start_datetime', '>=', context_today()), ('start_datetime', '&lt;', (context_today() + relativedelta(days=1)))]</field>
+        <field name="context">{'graph_groupbys': ['start_datetime:hour'], 'graph_measures': ['__count__'], 'graph_type': 'bar'}</field>
+    </record>
+    <record id="action_monitoreo_alert_recent" model="ir.actions.act_window">
+        <field name="name">Alertas recientes</field>
+        <field name="res_model">monitoreo.alert</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('date', '>=', (context_today() - relativedelta(days=7)))]</field>
+        <field name="context">{'default_state': 'pending'}</field>
+    </record>
+</odoo>

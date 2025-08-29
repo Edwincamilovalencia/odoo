@@ -1,0 +1,203 @@
+﻿<odoo>
+    <!-- Vista lista (tree) para agentes -->
+    <record id="view_monitoreo_agent_tree" model="ir.ui.view">
+        <field name="name">monitoreo.agent.tree</field>
+        <field name="model">monitoreo.agent</field>
+        <field name="arch" type="xml">
+            <tree string="Agentes Monitoreados">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="last_update"/>
+                <field name="call_count_today"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista gráfica de llamadas relacionadas (subvista) -->
+    <record id="view_monitoreo_call_graph_agent_rel" model="ir.ui.view">
+        <field name="name">monitoreo.agent.call.graph</field>
+        <field name="model">monitoreo.call</field>
+        <field name="arch" type="xml">
+            <graph string="Llamadas últimos 7 días" type="bar">
+                <!-- Agrupación por día -->
+                <field name="start_datetime" interval="day"/>
+                <!-- Medida: duración de llamadas -->
+                <field name="duration" type="measure"/>
+                <!-- Agrupación por estado -->
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vista formulario (form) para agentes -->
+    <record id="view_monitoreo_agent_form" model="ir.ui.view">
+        <field name="name">monitoreo.agent.form</field>
+        <field name="model">monitoreo.agent</field>
+        <field name="arch" type="xml">
+            <form string="Agente Monitoreado">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="state"/>
+                        <field name="last_update"/>
+                        <field name="call_count_today" readonly="1"/>
+                        <!-- Campos ocultos para los datos del gráfico -->
+                        <field name="calls_day_1" invisible="1"/>
+                        <field name="calls_day_2" invisible="1"/>
+                        <field name="calls_day_3" invisible="1"/>
+                        <field name="calls_day_4" invisible="1"/>
+                        <field name="calls_day_5" invisible="1"/>
+                        <field name="calls_day_6" invisible="1"/>
+                        <field name="calls_day_7" invisible="1"/>
+                        <field name="calls_day_1_percent" invisible="1"/>
+                        <field name="calls_day_2_percent" invisible="1"/>
+                        <field name="calls_day_3_percent" invisible="1"/>
+                        <field name="calls_day_4_percent" invisible="1"/>
+                        <field name="calls_day_5_percent" invisible="1"/>
+                        <field name="calls_day_6_percent" invisible="1"/>
+                        <field name="calls_day_7_percent" invisible="1"/>
+                        <field name="calls_total_7d" invisible="1"/>
+                    </group>
+                    
+                    <!-- Gráfico embebido: llamadas de los últimos 7 días -->
+                    <notebook>
+                        <page string="Estadísticas de Llamadas (7 días)">
+                            <div class="o_graph_view" style="height: 400px; padding: 20px;">
+                                <h4>Llamadas del Agente - Últimos 7 días</h4>
+                                <div class="graph-container" style="position: relative; height: 300px; border: 1px solid #ddd; margin: 10px 0; padding: 20px;">
+                                    
+                                    <!-- Gráfico de barras simplificado -->
+                                    <div style="width: 100%; max-width: 600px; margin: 0 auto;">
+                                        <!-- Estilos para el gráfico de barras -->
+                                        <style>
+                                            .custom-bar-row { display: flex; align-items: center; margin-bottom: 10px; }
+                                            .custom-bar-label { width: 50px; text-align: right; margin-right: 10px; font-weight: bold; }
+                                            .custom-bar-bg { background: #eee; width: 300px; height: 18px; border-radius: 6px; margin-right: 10px; overflow: hidden; }
+                                            .custom-bar-fill-1 { background: #4a90e2; height: 100%; border-radius: 6px 0 0 6px; }
+                                            .custom-bar-fill-2 { background: #d3e24a; height: 100%; border-radius: 6px 0 0 6px; }
+                                            .custom-bar-fill-3 { background: #4ae270; height: 100%; border-radius: 6px 0 0 6px; }
+                                            .custom-bar-fill-4 { background: #e24a57; height: 100%; border-radius: 6px 0 0 6px; }
+                                            .custom-bar-fill-5 { background: #e26d4a; height: 100%; border-radius: 6px 0 0 6px; }
+                                            .custom-bar-fill-6 { background: #4ae2b4; height: 100%; border-radius: 6px 0 0 6px; }
+                                            .custom-bar-fill-7 { background: #020f1d; height: 100%; border-radius: 6px 0 0 6px; }
+                                            .custom-bar-value { width: 30px; text-align: left; font-size: 12px; }
+                                        </style>
+                                        <div class="custom-bar-row">
+                                            <span class="custom-bar-label">Hoy</span>
+                                            <div class="custom-bar-bg">
+                                                <field name="calls_day_1_percent" invisible="1"/>
+                                                <div class="custom-bar-fill-1" style="width: [[ calls_day_1_percent ]]%;"></div>
+                                            </div>
+                                            <span class="custom-bar-value"><field name="calls_day_1" readonly="1"/></span>
+                                        </div>
+                                        <div class="custom-bar-row">
+                                            <span class="custom-bar-label">Ayer</span>
+                                            <div class="custom-bar-bg">
+                                                <field name="calls_day_2_percent" invisible="1"/>
+                                                <div class="custom-bar-fill-2" style="width: [[ calls_day_2_percent ]]%;"></div>
+                                            </div>
+                                            <span class="custom-bar-value"><field name="calls_day_2" readonly="1"/></span>
+                                        </div>
+                                        <div class="custom-bar-row">
+                                            <span class="custom-bar-label">-2d</span>
+                                            <div class="custom-bar-bg">
+                                                <field name="calls_day_3_percent" invisible="1"/>
+                                                <div class="custom-bar-fill-3" style="width: [[ calls_day_3_percent ]]%;"></div>
+                                            </div>
+                                            <span class="custom-bar-value"><field name="calls_day_3" readonly="1"/></span>
+                                        </div>
+                                        <div class="custom-bar-row">
+                                            <span class="custom-bar-label">-3d</span>
+                                            <div class="custom-bar-bg">
+                                                <field name="calls_day_4_percent" invisible="1"/>
+                                                <div class="custom-bar-fill-4" style="width: [[ calls_day_4_percent ]]%;"></div>
+                                            </div>
+                                            <span class="custom-bar-value"><field name="calls_day_4" readonly="1"/></span>
+                                        </div>
+                                        <div class="custom-bar-row">
+                                            <span class="custom-bar-label">-4d</span>
+                                            <div class="custom-bar-bg">
+                                                <field name="calls_day_5_percent" invisible="1"/>
+                                                <div class="custom-bar-fill-5" style="width: [[ calls_day_5_percent ]]%;"></div>
+                                            </div>
+                                            <span class="custom-bar-value"><field name="calls_day_5" readonly="1"/></span>
+                                        </div>
+                                        <div class="custom-bar-row">
+                                            <span class="custom-bar-label">-5d</span>
+                                            <div class="custom-bar-bg">
+                                                <field name="calls_day_6_percent" invisible="1"/>
+                                                <div class="custom-bar-fill-6" style="width: [[ calls_day_6_percent ]]%;"></div>
+                                            </div>
+                                            <span class="custom-bar-value"><field name="calls_day_6" readonly="1"/></span>
+                                        </div>
+                                        <div class="custom-bar-row">
+                                            <span class="custom-bar-label">-6d</span>
+                                            <div class="custom-bar-bg">
+                                                <field name="calls_day_7_percent" invisible="1"/>
+                                                <div class="custom-bar-fill-7" style="width: [[ calls_day_7_percent ]]%;"></div>
+                                            </div>
+                                            <span class="custom-bar-value"><field name="calls_day_7" readonly="1"/></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Eje Y (Número de llamadas) -->
+                                    <div style="position: absolute; left: 5px; top: 50%; transform: rotate(-90deg); font-size: 12px; font-weight: bold;">
+                                        Número de Llamadas
+                                    </div>
+                                    
+                                    <!-- Título del gráfico -->
+                                    <div style="text-align: center; font-size: 14px; font-weight: bold; margin-bottom: 10px;">
+                                        Actividad Semanal del Agente
+                                    </div>
+                                </div>
+                                
+                                <!-- Información adicional -->
+                                <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                                    <div style="text-align: center;">
+                                        <strong>Total de Llamadas (7 días):</strong><br/>
+                                        <span style="font-size: 18px; color: #4a90e2;">
+                                            <field name="calls_total_7d" readonly="1"/>
+                                        </span>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <strong>Estado Actual:</strong><br/>
+                                        <span style="font-size: 16px;">
+                                            <field name="state" readonly="1"/>
+                                        </span>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <strong>Última Actualización:</strong><br/>
+                                        <span style="font-size: 14px;">
+                                            <field name="last_update" readonly="1"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista gráfica para agentes -->
+    <record id="view_monitoreo_agent_graph" model="ir.ui.view">
+        <field name="name">monitoreo.agent.graph</field>
+        <field name="model">monitoreo.agent</field>
+        <field name="arch" type="xml">
+            <graph string="Estados de Agentes" type="pie">
+                <field name="state" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Acción para abrir agentes -->
+    <record id="action_monitoreo_agent" model="ir.actions.act_window">
+        <field name="name">Agentes</field>
+        <field name="res_model">monitoreo.agent</field>
+        <field name="view_mode">tree,form,kanban,graph</field>
+        <field name="help" type="html">
+            <p>Gestione y monitoree los agentes del sistema.</p>
+        </field>
+    </record>
+</odoo>

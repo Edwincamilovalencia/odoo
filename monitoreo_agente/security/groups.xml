@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_monitoreo_agente_user" model="res.groups">
+        <field name="name">Usuario Monitoreo Agente</field>
+        <field name="category_id" ref="base.module_category_tools"/>
+    </record>
+</odoo>
