@@ -1,0 +1,49 @@
+<odoo>
+  <data>
+    <!-- Mount point rendered in the Control Panel buttons area -->
+    <template id="RetainCallHeaderMount">
+      <div id="retain_header_mount"></div>
+    </template>
+
+    <!-- Actual component template -->
+    <template id="RetainCallHeader">
+      <div class="o_retain_header">
+        <img class="logo" src="/web/static/img/logo.png"/>
+        <div class="agents">
+          <label>Agentes</label>
+                    <select id="retain_agent_selector" multiple="multiple"></select>
+        </div>
+        <div class="dates">
+          <label>Desde</label>
+          <input id="retain_date_from" type="date"/>
+          <label>Hasta</label>
+          <input id="retain_date_to" type="date"/>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" t-on-click="applyRetainFilters">Aplicar</button>
+          <button class="btn btn-secondary" t-on-click="clearRetainFilters">Limpiar</button>
+        </div>
+      </div>
+    </template>
+<!--
+        <template id="listing">
+          <ul>
+            <li t-foreach="objects" t-as="object">
+              <a t-attf-href="#{ root }/objects/#{ object.id }">
+                <t t-esc="object.display_name"/>
+              </a>
+            </li>
+          </ul>
+        </template>
+        <template id="object">
+          <h1><t t-esc="object.display_name"/></h1>
+          <dl>
+            <t t-foreach="object._fields" t-as="field">
+              <dt><t t-esc="field"/></dt>
+              <dd><t t-esc="object[field]"/></dd>
+            </t>
+          </dl>
+        </template>
+-->
+  </data>
+</odoo>

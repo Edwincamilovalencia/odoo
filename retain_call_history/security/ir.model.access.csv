@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_retain_call_history_user,retain.call.history.user,retain_call_history.model_retain_call_history,,1,1,1,1
+access_retain_call_history_trash_user,retain.call.history.trash.user,retain_call_history.model_retain_call_history_trash,,1,1,1,1
+access_llamada_settings_user,llamada.settings.user,retain_call_history.model_llamada_settings,,1,1,1,1
+access_llamada_settings_admin,llamada.settings.admin,retain_call_history.model_llamada_settings,,1,1,1,1
+access_llamada_trash_admin,llamada.trash.admin,retain_call_history.model_retain_call_history_trash,,1,1,1,1
+access_llamada_admin,llamada.admin,retain_call_history.model_retain_call_history,,1,1,1,1
+access_llamada_settings_readonly,llamada.settings.readonly,retain_call_history.model_llamada_settings,retain_call_history.group_llamada_settings_readonly,1,0,0,0
+access_llamada_trash_readonly,llamada.trash.readonly,retain_call_history.model_retain_call_history_trash,retain_call_history.group_llamada_trash_readonly,1,0,0,0
+access_llamada_readonly,llamada.readonly,retain_call_history.model_retain_call_history,retain_call_history.group_llamada_readonly,1,0,0,0

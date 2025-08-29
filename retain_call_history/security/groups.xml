@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Categoría para los grupos del módulo -->
+        <record id="module_category_retain_call_history" model="ir.module.category">
+            <field name="name">Gestión de Llamadas</field>
+            <field name="description">Gestión y configuración de llamadas</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- Grupo de solo lectura para llamada.settings -->
+        <record id="group_llamada_settings_readonly" model="res.groups">
+            <field name="name">Llamada Settings Solo Lectura</field>
+            <field name="category_id" ref="module_category_retain_call_history"/>
+            <field name="comment">Acceso de solo lectura a configuración de llamadas</field>
+        </record>
+        
+        <!-- Grupo de solo lectura para llamada -->
+        <record id="group_llamada_readonly" model="res.groups">
+            <field name="name">Llamada Solo Lectura</field>
+            <field name="category_id" ref="module_category_retain_call_history"/>
+            <field name="comment">Acceso de solo lectura a llamadas</field>
+        </record>
+        
+        <!-- Grupo de solo lectura para llamada trash -->
+        <record id="group_llamada_trash_readonly" model="res.groups">
+            <field name="name">Llamada Trash Solo Lectura</field>
+            <field name="category_id" ref="module_category_retain_call_history"/>
+            <field name="comment">Acceso de solo lectura a papelera de llamadas</field>
+        </record>
+    </data>
+</odoo>

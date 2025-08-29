@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree para administradores -->
+    <record id="view_retain_call_history_trash_tree" model="ir.ui.view">
+        <field name="name">retain.call.history.trash.tree.admin</field>
+        <field name="model">retain.call.history.trash</field>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+        <field name="arch" type="xml">
+            <tree string="Llamadas Eliminadas">
+                <field name="call_id" string="ID de Llamada"/>
+                <field name="direction" string="Dirección"/>
+                <field name="from_number" string="Número origen"/>
+                <field name="to_number" string="Número destino"/>
+                <field name="agent_name" string="Agente"/>
+          <field name="call_status" widget="badge"
+              decoration-success="call_status == 'ended'"
+              decoration-danger="call_status in ('marked_as_spam','user_declined','invalid_destination','sip_routing_error')"
+              decoration-warning="call_status in ('pending','unknown','not_connected')"
+              decoration-info="call_status in ('registered','ongoing')"/>
+                <field name="duration_ms" string="Duración (ms)"/>
+                <field name="disconnection_reason" string="Motivo de desconexión"/>
+                <button name="action_restore" string="Restaurar" type="object" icon="fa-undo"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Tree para usuarios de solo lectura -->
+    <record id="view_retain_call_history_trash_tree_readonly" model="ir.ui.view">
+        <field name="name">retain.call.history.trash.tree.readonly</field>
+        <field name="model">retain.call.history.trash</field>
+        <field name="groups_id" eval="[(4, ref('retain_call_history.group_llamada_trash_readonly'))]"/>
+        <field name="arch" type="xml">
+            <tree string="Llamadas Eliminadas" create="false" edit="false" delete="false">
+                <field name="call_id" string="ID de Llamada"/>
+                <field name="direction" string="Dirección"/>
+                <field name="from_number" string="Número origen"/>
+                <field name="to_number" string="Número destino"/>
+                <field name="agent_name" string="Agente"/>
+          <field name="call_status" widget="badge"
+              decoration-success="call_status == 'ended'"
+              decoration-danger="call_status in ('marked_as_spam','user_declined','invalid_destination','sip_routing_error')"
+              decoration-warning="call_status in ('pending','unknown','not_connected')"
+              decoration-info="call_status in ('registered','ongoing')"/>
+                <field name="duration_ms" string="Duración (ms)"/>
+                <field name="disconnection_reason" string="Motivo de desconexión"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción de Ventana para Eliminados -->
+    <record id="action_retain_call_history_trash" model="ir.actions.act_window">
+        <field name="name">Llamadas Eliminadas</field>
+        <field name="res_model">retain.call.history.trash</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista Form para Eliminados -->
+    <record id="view_retain_call_history_trash_form" model="ir.ui.view">
+        <field name="name">retain.call.history.trash.form</field>
+        <field name="model">retain.call.history.trash</field>
+        <field name="arch" type="xml">
+            <form string="Llamadas Eliminadas">
+                <sheet>
+                    <group>
+                        <group>
+                            <!-- Campos para administradores (editables) -->
+                            <field name="call_id" groups="base.group_system"/>
+                            <field name="direction" groups="base.group_system"/>
+                            <field name="from_number" groups="base.group_system"/>
+                            <field name="to_number" groups="base.group_system"/>
+                            <field name="agent_name" groups="base.group_system"/>
+                            <field name="call_status" groups="base.group_system"/>
+                            <field name="duration_ms" groups="base.group_system"/>
+                            <field name="disconnection_reason" groups="base.group_system"/>
+                            <field name="description_llamada" groups="base.group_system"/>
+                            <field name="transcription" groups="base.group_system"/>
+                            
+                            <!-- Campos para usuarios de solo lectura -->
+                            <field name="call_id" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="direction" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="from_number" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="to_number" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="agent_name" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="call_status" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="duration_ms" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="disconnection_reason" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="description_llamada" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                            <field name="transcription" readonly="1" groups="retain_call_history.group_llamada_trash_readonly"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menú para Eliminados -->
+    <menuitem id="menu_retain_call_history_trash" name="Llamadas Eliminadas" parent="menu_retain_call_submenu" action="action_retain_call_history_trash" sequence="2"/>
+</odoo>

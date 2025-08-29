@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Hidden search view with dynamic domain from context -->
+    <record id="view_retain_call_history_search" model="ir.ui.view">
+        <field name="name">retain.call.history.search</field>
+        <field name="model">retain.call.history</field>
+        <field name="arch" type="xml">
+            <search string="Buscar llamadas">
+                <!-- Invisible filters that become active when JS sets search_default_* in context -->
+                <filter name="retain_agents_filter" string="Agente" invisible="1" domain="[( 'agent_name', 'in', context.get('retain_agents', []) )]"/>
+                <filter name="retain_date_from_filter" string="Desde" invisible="1" domain="[( 'call_date', '&gt;=', context.get('retain_date_from') )]"/>
+                <filter name="retain_date_to_filter" string="Hasta" invisible="1" domain="[( 'call_date', '&lt;=', context.get('retain_date_to') )]"/>
+                <!-- Optional quick fields -->
+                <field name="agent_name"/>
+                <field name="call_date"/>
+            </search>
+        </field>
+    </record>
+    <!-- Vista Tree para administradores -->
+    <record id="view_retain_call_history_tree" model="ir.ui.view">
+        <field name="name">retain.call.history.tree.admin</field>
+        <field name="model">retain.call.history</field>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+        <field name="arch" type="xml">
+            <tree string="Historial de Llamadas">
+                <field name="call_id" string="ID de Llamada"/>
+                <field name="direction" string="Dirección"/>
+                <field name="from_number" string="Número origen"/>
+                <field name="to_number" string="Número destino"/>
+                <field name="agent_name" string="Agente"/>
+                <field name="call_status" widget="badge"
+                       decoration-success="call_status in ('ended', 'completed')"
+                       decoration-danger="call_status in ('failed', 'not_connected', 'invalid_destination', 'telephony_provider_permission_denied', 'telephony_provider_unavailable', 'sip_routing_error', 'marked_as_spam', 'user_declined')"
+                       decoration-warning="call_status in ('pending', 'unknown', 'registered')"
+                       decoration-info="call_status in ('in_progress', 'ongoing')"
+                       decoration-muted="call_status == 'ended'"/>
+                <field name="duration" string="Duración(min)"/>
+                <field name="disconnection_reason" string="Motivo de desconexión"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Tree para usuarios de solo lectura -->
+    <record id="view_retain_call_history_tree_readonly" model="ir.ui.view">
+        <field name="name">retain.call.history.tree.readonly</field>
+        <field name="model">retain.call.history</field>
+        <field name="groups_id" eval="[(4, ref('retain_call_history.group_llamada_readonly'))]"/>
+        <field name="arch" type="xml">
+            <tree string="Historial de Llamadas" create="false" edit="false" delete="false">
+                <field name="call_id" string="ID de Llamada"/>
+                <field name="direction" string="Dirección"/>
+                <field name="from_number" string="Número origen"/>
+                <field name="to_number" string="Número destino"/>
+                <field name="agent_name" string="Agente"/>
+                <field name="call_status" widget="badge"
+                       decoration-success="call_status in ('ended', 'completed')"
+                       decoration-danger="call_status in ('failed', 'not_connected', 'invalid_destination', 'telephony_provider_permission_denied', 'telephony_provider_unavailable', 'sip_routing_error', 'marked_as_spam', 'user_declined')"
+                       decoration-warning="call_status in ('pending', 'unknown', 'registered')"
+                       decoration-info="call_status in ('in_progress', 'ongoing')"
+                       decoration-muted="call_status == 'ended'"/>
+                <field name="duration" string="Duración(min)"/>
+                <field name="disconnection_reason" string="Motivo de desconexión"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_retain_call_history_form" model="ir.ui.view">
+        <field name="name">retain.call.history.form</field>
+        <field name="model">retain.call.history</field>
+        <field name="arch" type="xml">
+            <form string="Historial de Llamadas">
+                <header>
+                    <field name="call_status" invisible="1"/>
+                    <field name="status_var" invisible="1"/>
+                    <field name="status_var" widget="statusbar" readonly="1"
+                           statusbar_visible="registered,ongoing,ended,not_connected,invalid_destination,telephony_provider_permission_denied,telephony_provider_unavailable,sip_routing_error,marked_as_spam,user_declined"
+                           decoration-success="status_var == 'ended'"
+                           decoration-danger="status_var in ('not_connected', 'invalid_destination', 'telephony_provider_permission_denied', 'telephony_provider_unavailable', 'sip_routing_error', 'marked_as_spam', 'user_declined')"
+                           decoration-warning="status_var == 'registered'"
+                           decoration-info="status_var == 'ongoing'"/>
+                    <button name="action_descargar_llamada"
+                            string="Descargar llamada"
+                            type="object"
+                            class="btn-primary"
+                            invisible="call_status != 'completed'"/>
+                    <button name="action_sincronizar_historial"
+                            string="Sincronizar historial"
+                            type="object"
+                            class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <div class="seq_class">
+                        <h1>
+                            <field name="sequence" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="editable" groups="base.group_system"/>
+                            <field name="editable" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="name" readonly="not editable" required="1" groups="base.group_system"/>
+                            <field name="name" readonly="1" required="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="phone" readonly="not editable" required="1" groups="base.group_system"/>
+                            <field name="phone" readonly="1" required="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="call_status" readonly="not editable" groups="base.group_system"/>
+                            <field name="call_status" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="direction" readonly="not editable" groups="base.group_system"/>
+                            <field name="direction" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="agent_name" readonly="not editable" groups="base.group_system"/>
+                            <field name="agent_name" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                        </group>
+                        <group>
+                            <field name="call_date" x_invisible="call_status == 'pending'" groups="base.group_system"/>
+                            <field name="call_date" readonly="1" x_invisible="call_status == 'pending'" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="duration" x_invisible="call_status == 'pending'" groups="base.group_system"/>
+                            <field name="duration" readonly="1" x_invisible="call_status == 'pending'" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="duration_ms" readonly="not editable" groups="base.group_system"/>
+                            <field name="duration_ms" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="from_number" readonly="not editable" groups="base.group_system"/>
+                            <field name="from_number" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="to_number" readonly="not editable" groups="base.group_system"/>
+                            <field name="to_number" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="disconnection_reason" readonly="not editable" groups="base.group_system"/>
+                            <field name="disconnection_reason" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                            <field name="call_id" readonly="not editable" groups="base.group_system"/>
+                            <field name="call_id" readonly="1" groups="retain_call_history.group_llamada_readonly"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Descripción de la llamada">
+                            <field name="description_llamada" readonly="not editable" placeholder="Añade aquí la descripción de la llamada..." groups="base.group_system"/>
+                            <field name="description_llamada" readonly="1" placeholder="Añade aquí la descripción de la llamada..." groups="retain_call_history.group_llamada_readonly"/>
+                        </page>
+                        <page string="Transcripción">
+                            <field name="transcription" readonly="not editable" placeholder="Transcripción automática de la llamada..." groups="base.group_system"/>
+                            <field name="transcription" readonly="1" placeholder="Transcripción automática de la llamada..." groups="retain_call_history.group_llamada_readonly"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción de Ventana -->
+    <record id="action_retain_call_history" model="ir.actions.act_window">
+        <field name="name">Historial de Llamadas</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">retain.call.history</field>
+        <field name="view_mode">tree,form,graph</field>
+        <field name="search_view_id" ref="retain_call_history.view_retain_call_history_search"/>
+    </record>
+
+    <!-- Vista Graph para estadísticas -->
+    <record id="view_retain_call_history_graph" model="ir.ui.view">
+        <field name="name">retain.call.history.graph</field>
+        <field name="model">retain.call.history</field>
+        <field name="arch" type="xml">
+            <graph string="Estadísticas de Llamadas" type="bar">
+                <field name="agent_name" type="row"/>
+                <field name="call_status" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Menús -->
+    <menuitem id="menu_retain_call_root" name="Gestión de Llamadas" sequence="10"/>
+    <menuitem id="menu_retain_call_submenu" name="Llamadas" parent="menu_retain_call_root" sequence="1"/>
+    <menuitem id="menu_retain_call_history" name="Historial de Llamadas" parent="menu_retain_call_submenu" action="action_retain_call_history" sequence="1"/>
+</odoo>
