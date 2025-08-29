@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- account.budget.item action window -->
+        <record id="account_budget_item_action" model="ir.actions.act_window">
+            <field name="name">Rubro presupuestal</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.budget.item</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Crear Rubro Presupuestal!
+                </p>
+                <p>
+                    No hay rubros presupuestales creados!
+                </p>
+            </field>
+        </record>
+
+        <!-- account.budget.item tree view -->
+        <record id="account_budget_item_view_tree" model="ir.ui.view">
+            <field name="name">account.budget.item.view.tree</field>
+            <field name="model">account.budget.item</field>
+            <field name="arch" type="xml">
+                <tree> 
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- account.budget.item form view -->
+        <record id="account_budget_item_view_form" model="ir.ui.view">
+            <field name="name">account.budget.item.view.form</field>
+            <field name="model">account.budget.item</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="type"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="account_ids" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
