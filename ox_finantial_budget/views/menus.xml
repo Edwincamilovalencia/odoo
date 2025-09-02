@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <menuitem id="badget_menu_categ" name="Presupuesto" parent="account.menu_finance" sequence="10"/>
+        <menuitem id="badget_menu_action" name="Presupuestos" parent="badget_menu_categ" sequence="10" action="account_budget_action"/>
+        <menuitem id="badget_item_menu_action" name="Rubros presupuestales" parent="badget_menu_categ" sequence="20" action="account_budget_item_action"/>
+    </data>
+</odoo>

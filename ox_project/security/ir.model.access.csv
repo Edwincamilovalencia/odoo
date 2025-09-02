@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_specific_objective,Access to Project Specific Objective,model_project_specific_objective,base.group_user,1,1,1,1
+access_project_material_budget,Access to Project Material Budget,model_project_material_budget,base.group_user,1,1,1,1
+access_project_scope,Access to Project Scope,model_project_scope,base.group_user,1,1,1,1
+access_actividad,Access to Project Specific Activity,model_project_specific_activity,base.group_user,1,1,1,1
+access_project_approval_history,access_project_approval_history,model_project_approval_history,,1,1,1,1
+access_project_type_user,access_project_type,model_project_type,base.group_user,1,1,1,1
+access_project_task_extension,access_project_task_extension,model_project_task,,1,1,1,1
+access_project_specification_wizard,access_project_specification_wizard,model_project_specification_wizard,,1,1,1,1
+access_project_stakeholder,Acceso Stakeholder,model_project_stakeholder,base.group_user,1,1,1,1
+access_project_task_evidence,access_project_task_evidence,model_project_task_evidence,,1,1,1,1
+access_project_fase_requisito_user,Access Project Fase Requisito,model_project_fase_requisito,base.group_user,1,0,0,0

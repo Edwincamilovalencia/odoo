@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+  <data>
+    <record id="view_budget_line_form" model="ir.ui.view">
+      <field name="name">budget.line.form</field>
+      <field name="model">account.budget.line</field>
+      <field name="arch" type="xml">
+        <form string="Detalles de Línea de Presupuesto">
+          <sheet>
+          <field name="budget_state" invisible="1" />
+            <group>
+                <field name="budget_id" string="Presupuesto" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+            </group>
+            <group>
+              <group>
+                <field name="budget_item_id" string="Rubro Presupuestal" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="analytic_account_id" string="Centro Costo" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="user_id" string="Responsable" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+              </group>
+              <group>
+                <field name="type" string="Tipo" />
+                <field name="comparison_status" string="Estado Comparación" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="monthly_budget" string="Presupuesto Mensual" widget="boolean_toggle" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+              </group>
+            </group>
+            <group string="Presupuesto Base">
+              <group>
+                <field name="planned_amount" string="Presupuesto" modifiers="{'readonly': [('budget_state', '!=','draft'),('monthly_budget', '=', True)]}"/>
+              </group>
+              <group>
+                <field name="executed_amount" string="Ejecución" readonly="1"/>
+                <field name="theoretical_value" string="Saldo" readonly="1"/>
+                <field name="executed_por_amount" string="% Ejecución" readonly="1"/>
+              </group>
+            </group>
+            <group string="Presupuesto Acumulado Mes">
+              <group>
+                <field name="planned_amount_month_accumulated" string="Presupuesto Acumulado" readonly="1"/>
+              </group>
+              <group>
+                <field name="executed_amount_month_accumulated" string="Ejecución Acumulada" readonly="1"/>
+                <field name="theoretical_value_month_accumulated" string="Saldo Acumulado" readonly="1"/>
+                <field name="executed_por_amount_month_accumulated" string="% Ejecución Acumulada" readonly="1"/>
+              </group>
+            </group>
+            <group string="Presupuesto Mensual" modifiers="{'invisible': [('monthly_budget', '=', False)]}">
+              <group>
+                <field name="budget_january" string="Enero" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_february" string="Febrero" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_march" string="Marzo" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_april" string="Abril" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_may" string="Mayo" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_june" string="Junio" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+              </group>
+              <group>
+                <field name="budget_july" string="Julio" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_august" string="Agosto" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_september" string="Septiembre" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_october" string="Octubre" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_november" string="Noviembre" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+                <field name="budget_december" string="Diciembre" modifiers="{'readonly': [('budget_state', '!=','draft')]}"/>
+              </group>
+            </group>
+            <footer>
+              <button name="action_save_and_close" type="object" string="Guardar y Cerrar" class="btn-secundary" />
+            </footer>
+          </sheet>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

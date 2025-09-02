@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_budget,ox_finantial_budget.account_budget,model_account_budget,,1,1,1,1
+access_account_budget_line,ox_finantial_budget.account_budget_line,model_account_budget_line,,1,1,1,1
+access_account_budget_item,ox_finantial_budget.account_budget_item,model_account_budget_item,,1,1,1,1

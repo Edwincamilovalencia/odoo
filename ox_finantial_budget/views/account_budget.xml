@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ventana de acción de account.budget -->
+        <record id="account_budget_action" model="ir.actions.act_window">
+            <field name="name">Presupuesto</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.budget</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Crear Nuevo Presupuesto!
+                </p>
+                <p>
+                    No hay presupuestos creados!
+                </p>
+            </field>
+        </record>
+
+        <!-- Vista de árbol de account.budget -->
+        <record id="account_budget_view_tree" model="ir.ui.view">
+            <field name="name">account.budget.view.tree</field>
+            <field name="model">account.budget</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="date_start" />
+                    <field name="date_end" />
+                    <field name="company_id" />
+                    <field name="budget_type" />
+                    <field name="project_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista de formulario de account.budget -->
+        <record id="account_budget_view_form" model="ir.ui.view">
+            <field name="name">account.budget.view.form</field>
+            <field name="model">account.budget</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" />
+                        <button name="action_active_budget" type="object" string="Iniciar" class="btn btn-success" confirm="Desea iniciar la ejecución del presupuesto?" modifiers="{'states': ['draft']}" />
+                        <button name="action_refresh_budget" type="object" string="Actualizar" class="btn btn-primary" modifiers="{'states': ['active']}" />
+                        <button name="action_create_new_version" type="object" string="Crear Nueva Versión" class="btn btn-secondary" confirm="Desea crear una nueva versión del presupuesto?"/>
+                        <button name="action_compare_versions" type="object" string="Comparar Versiones" class="btn btn-primary" modifiers="{'invisible': [('parent_id', '!=', False)]}"/>
+                        <button name="action_cancel_budget" type="object" string="Cancelar" class="btn btn-secondary" confirm="Desea cancelar el presupuesto?" modifiers="{'states': ['active']}" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name" class="h2 text-primary" modifiers="{'readonly':[('state','!=','draft')]}" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="parent_id" invisible="1"/>
+                                <field name="from_other_mod" invisible="1" />
+                                <field name="company_id" modifiers="{'readonly':[('state','!=','draft')]}" />
+                                <field name="project_id" modifiers="{'readonly':['|', ('state','!=','draft'), ('from_other_mod','=',True)]}" />
+                            </group>
+                            <group>
+                                <field name="budget_type" modifiers="{'readonly':['|', ('state','!=','draft'), ('from_other_mod','=',True)]}" />
+                                <label for="date_start" string="Periodo" />
+                                <div name="dates" class="o_row">
+                                    <field name="date_start" widget="daterange" options='{"related_end_date": "date_end"}' modifiers="{'readonly':[('state','!=','draft')]}" style="width:150px;background-color:#f6f6f6;" />
+                                    <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon" title="Arrow" />
+                                    <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow" modifiers="{'invisible': [('date_start', '=', False), ('date_end', '=', False)]}" />
+                                    <field name="date_end" widget="daterange" options='{"related_start_date": "date_start"}' modifiers="{'readonly':[('state','!=','draft')]}" style="width:150px;background-color:#f6f6f6;" />
+                                </div>
+                                <field name="month_selection"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Lineas del presupuesto">
+                                <field name="budget_line_ids" modifiers="{'readonly':[('state','!=','draft')]}">
+                                    <tree editable="bottom" decoration-info="comparison_status == 'M'" decoration-danger="comparison_status == 'D'">
+                                        <field name="budget_item_id" />
+                                        <field name="analytic_account_id" optional="show"/>
+                                        <field name="planned_amount" sum="Total presupuesto"/>
+                                        <field name="budget_month" sum="Presupuesto mes"/>
+                                        <field name="executed_amount" readonly="1" force_save="1" sum="Total ejecución"/>
+                                        <field name="theoretical_value" readonly="1" force_save="1" sum="Total saldo"/>
+                                        <field name="executed_por_amount" readonly="1" force_save="1" />
+                                        <field name="comparison_status" invisible="1"/>
+                                        <field name="planned_amount_month_accumulated" readonly="1" force_save="1" sum="Total presupuesto acumulado"/>
+                                        <field name="executed_amount_month_accumulated" readonly="1" force_save="1" sum="Total ejecución acumulado"/>
+                                        <field name="theoretical_value_month_accumulated" readonly="1" force_save="1" sum="Total saldo acumulado"/>
+                                        <field name="executed_por_amount_month_accumulated" readonly="1" force_save="1" />
+                                        <field name="type" optional="hide"/>
+                                        <field name="user_id" optional="hide"/>
+                                        <button name="action_account_budget_line_form" type="object" string="Presupuesto"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Versiones">
+                                <field name="child_ids" modifiers="{'readonly':[('state','!=','draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="name" />
+                                        <field name="create_date" string="Fecha Creación" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

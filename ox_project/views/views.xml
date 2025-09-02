@@ -1,0 +1,220 @@
+<odoo>
+  <data>
+    <!--**********************Proyectos***************************** -->
+    <!-- Definición vista kanban de proyectos -->
+    <record id="proyectos_kanban" model="ir.ui.view">
+      <field name="name">project.project.kanban</field>
+      <field name="model">project.project</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+
+        <kanban default_group_by="pro_fase" default_order="sequence,name" js_class="project_kanban" class="o_kanban_small_column" quick_create="false">
+          <field name="name"/>
+          <field name="is_favorite"/>
+          <field name="company_id"/>
+          <field name="user_id"/>
+          <field name="date_start"/>
+          <field name="date"/>
+          <field name="tag_ids"/>
+          <field name="open_task_count"/>
+          <field name="pro_fase"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_global_click o_kanban_card p-2">
+                <div class="o_kanban_content">
+                  <div class="d-flex align-items-center mb-1">
+                    <field name="is_favorite" widget="boolean_favorite" nolabel="1" class="me-1"/>
+                    <div class="o_kanban_record_title fw-bold flex-grow-1">
+                      <field name="name"/>
+                    </div>
+                  </div>
+                  <div class="text-muted small mb-1">
+                    <i class="fa fa-user me-1"/>
+                    <field name="company_id"/>,
+                    <field name="user_id"/>
+                  </div>
+                  <!-- fechas -->
+                  <div class="text-muted small mb-2">
+                    <i class="fa fa-clock-o me-1"/>
+                    <field name="date_start"/> <span class="mx-1">→</span> <field name="date"/>
+                  </div>
+                  <!-- Tags -->
+                  <div class="o_kanban_tags_section mb-2">
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                  </div>
+                    <!-- Pie de tarjeta con conteo de tareas, avatar y punto de fase -->
+                  <div class="d-flex align-items-center justify-content-between mt-2">
+                    <div class="text-muted fw-semibold">
+                      <t t-set="tasks" t-value="record.open_task_count and record.open_task_count.raw_value or 0"/>
+                      <t t-esc="tasks"/> Tareas
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <field name="user_id" widget="many2one_avatar_user"/>
+                      <span class="badge rounded-pill text-bg-secondary">
+                        <field name="pro_fase"/>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <!-- Definición vista lista de proyectos -->
+    <record id="proyectos_tree" model="ir.ui.view">
+      <field name="name">project.project.tree</field>
+      <field name="model">project.project</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Proyecto">
+          <field name="name" />
+          <field name="pro_lider" />
+          <field name="pro_fase" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- Hereda la vista estándar de lista para mantener el estilo de Odoo y agregar columnas personalizadas -->
+    <record id="proyectos_tree_inherit" model="ir.ui.view">
+      <field name="name">project.project.tree.inherit.ox</field>
+      <field name="model">project.project</field>
+      <field name="inherit_id" ref="project.view_project"/>
+      <field name="arch" type="xml">
+        <xpath expr="//tree/field[@name='display_name']" position="after">
+          <field name="pro_lider" string="Líder"/>
+          <field name="pro_fase" string="Fase"/>
+        </xpath>
+      </field>
+    </record>
+
+    <!-- Sobrescribe la acción estándar del menú Proyectos para abrir en lista por defecto -->
+    <record id="project.open_view_project_all" model="ir.actions.act_window">
+      <field name="view_mode">tree,kanban,form</field>
+  <field name="views" eval="[(ref('project.view_project'), 'tree'), (ref('project.view_project_kanban'), 'kanban')]"/>
+      <field name="view_id" ref="project.view_project"/>
+    </record>
+
+    <!-- Según configuración, el menú puede usar esta acción; aplicar el mismo orden -->
+    <record id="project.open_view_project_all_group_stage" model="ir.actions.act_window">
+      <field name="view_mode">tree,kanban,form</field>
+  <field name="views" eval="[(ref('project.view_project'), 'tree'), (ref('project.view_project_kanban'), 'kanban')]"/>
+      <field name="view_id" ref="project.view_project"/>
+    </record>
+
+    <!-- Variante usada en menú de Configuración -->
+    <record id="project.open_view_project_all_config" model="ir.actions.act_window">
+      <field name="view_mode">tree,kanban,form</field>
+  <field name="views" eval="[(ref('project.view_project'), 'tree'), (ref('project.view_project_kanban'), 'kanban')]"/>
+      <field name="view_id" ref="project.view_project"/>
+    </record>
+
+    <!-- Variante de configuración con etapas agrupadas -->
+    <record id="project.open_view_project_all_config_group_stage" model="ir.actions.act_window">
+      <field name="view_mode">tree,kanban,form</field>
+  <field name="views" eval="[(ref('project.view_project'), 'tree'), (ref('project.view_project_kanban'), 'kanban')]"/>
+      <field name="view_id" ref="project.view_project"/>
+    </record>
+
+    <!--**********************Componentes***************************** -->
+
+    <!-- Accion al ejecutar el menu de componentes -->
+    <record id="action_tareas_gantt" model="ir.actions.act_window">
+      <field name="name">Tareas Gantt</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">project.task</field>
+      <field name="view_mode">tree,form,kanban</field>
+      <field name="domain">[('pro_tipo', '=', 'tarea')]</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Crear nueva tarea!
+        </p>
+        <p>
+          Sin mensaje... 
+        </p>
+      </field>
+    </record>
+
+    <!-- Definición vista lista de componentes -->
+    <record id="tareas_tree" model="ir.ui.view">
+      <field name="name">project.task.tree</field>
+      <field name="model">project.task</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Tareas">
+          <field name="name" />
+          <field name="project_id" />
+          <field name="date_start" />
+          <field name="date_end" />
+          <field name="pro_porcentaje_ejecucion_tarea" />
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- Definición vista formulario de componentes -->
+    <record id="componentes_form" model="ir.ui.view">
+      <field name="name">project.task.form</field>
+      <field name="model">project.task</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <form string="Gestion de Componentes">
+          <header>
+            <button type="object" id="action_close" name="action_close" class="btn btn-primary" string="Cerrar tarea" confirm="Está seguro que desea cerrar la tarea actual?" modifiers="{'invisible':[('pro_tipo','!=', 'tarea')]}"/>
+
+          </header>
+          <sheet>
+            <group string="Datos Generales" class="text-primary">
+              <group>
+                <field name="name" string="Nombre" modifiers="{'readonly':[('ini_ejec','=',True)]}"/>
+              </group>
+              <group>
+                <field name="pro_tipo" readonly="1" modifiers="{'invisible':[('pro_tipo','=','tarea')]}" />
+                <field name="pro_tipo_tarea" string="Tipo Tarea" modifiers="{'invisible':[('pro_tipo','!=','tarea')], 'readonly':[('ini_ejec','=',True)], 'required':[('pro_tipo','=', 'tarea')]}"/>
+              </group>
+            </group>
+            <br />
+            <group>
+              <group>
+                <field name="pro_peso" string="Peso %" modifiers="{'invisible':[('pro_tipo','!=','componente')], 'readonly':[('ini_ejec','=',True)]}"/>
+                <field name="date_end" string="Fecha fin" modifiers="{'invisible':[('pro_tipo','=','componente')], 'readonly':[('ini_ejec','=',True)]}"/>
+                <field name="pro_responsable_id" string="Responsable" modifiers="{'invisible':[('pro_tipo','not in',('actividad', 'tarea'))], 'readonly':[('ini_ejec','=',True)]}"/>
+                <field name="company_id" string="Compañía" invisible="1"/>
+              </group>
+              <group>
+                <field name="ini_ejec" invisible="1" />
+                <field name="is_closed" invisible="1" />
+                <field name="pro_ejecutada" string="Ejecutada?" modifiers="{'invisible':['|', '|',('pro_tipo_tarea','!=','cualitativa'),('pro_tipo','!=','tarea'), ('ini_ejec', '=', False)]}"/>
+                <field name="pro_porcentaje_ejecucion_tarea" string="% Ejecución" modifiers="{'invisible':['|', ('pro_tipo','!=','tarea'), ('ini_ejec', '=', False)], 'readonly':['|','|',('pro_tipo','!=','tarea'), ('pro_tipo_tarea','=','cualitativa'),('is_closed','=',True)]}"/>
+                <field name="pro_porcentaje_ejecucion" string="% Ejecución" modifiers="{'invisible':[('pro_tipo','=','tarea')]}"/>
+              </group>
+            </group>
+            <hr />
+            <group col="2">
+              <field colspan="2" name="pro_unidades_ids" nolabel="1" modifiers="{'invisible':[('pro_tipo','=','tarea')]}" class="text-start text-left">
+                <tree editable="bottom" create="false">
+                  <field name="name" readonly="1"/>
+                  <field name="pro_tipo" readonly="1" invisible="1"/>
+                  <field name="pro_porcentaje_ejecucion" readonly="1" widget="progressbar" string="% Ejecución" class="text-start"/>
+                  <button type="object" id="action_open" name="action_open" class="btn btn-primary fa o_external_button fa-arrow-right" />
+                </tree>
+              </field>
+            </group>
+            <group>
+              <button id="action_adicionar_unidad" class="btn btn-xs btn-primary" name="action_adicionar_unidad" string="Adicionar" type="object" modifiers="{'invisible':[('pro_tipo','=','tarea')]}" />
+            </group>
+            <notebook>
+              <page string="Información general" modifiers="{'invisible':[('pro_tipo','!=','tarea')]}">
+                <group>
+                  <field name="pro_detalle" modifiers="{'invisible':[('pro_tipo','!=','tarea')], 'readonly':[('ini_ejec','=',True)]}"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>
